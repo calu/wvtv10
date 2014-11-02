@@ -27,6 +27,11 @@
 		</div>
 	</div>
 @endif 
- 
+
+test de databank
+<?php
+$users = User::all();
+var_dump($users);
+?>
  
 @stop
