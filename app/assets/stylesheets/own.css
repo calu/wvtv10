@@ -1,0 +1,43 @@
+/*
+ * @file : own.css
+ * 
+ * @author : dr. Johan Calu
+ * @date : 2014 - 06 - 24
+ * 
+ * @info : dit bestand bevat de css elementen die we zelf toevoegen aan het systeem
+ */
+
+/***** menubalk *******/
+.titel{
+	height : 70px;
+	vertical-align : middle;
+	padding : 0px;
+	margin : 0px;
+	color : red;
+	font-size : 1.3em;
+} 
+
+li.menu{
+	padding-top:6px;
+}
+
+/**** de titelbalk ****/
+.titeltekst{
+	height: 60px;
+	font-family: "Warnock Pro", "Goudy Old Style", "Palatino", "Book Antiqua", Georgia, serif;
+	font-size : 1.6em;
+	font-style: italic;
+	font-weight: normal;
+	color: #0066CC;     
+	text-align : center;
+	line-height : 60px; 
+	vertical-align : text-bottom;    
+	
+	width : 100%;       
+}
+
+/*** een rood kader ***/
+.roodkader{
+	border : 1px solid red;
+	padding : 10px;
+}
