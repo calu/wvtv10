@@ -1,8 +1,10 @@
 {
 	"require": {
 		"laravel/framework": "4.2.*",
-		"cartalyst/sentry": "2.1.*"
+		"cartalyst/sentry": "2.1.*",
+		"codesleeve/asset-pipeline": "dev-master"
 	},
+	
 	"require-dev": {
 		"way/generators": "~2.6",
 		"mockery/mockery": "~0.9",

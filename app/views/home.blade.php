@@ -3,35 +3,88 @@
 {{-- Web site Title --}}
 @section('title')
 @parent
-{{trans('pages.helloworld')}}
+{{trans('pages.title')}}
 @stop
 
 {{-- Content --}}
 @section('content')
 
-<div class="jumbotron">
-  <div class="container">
-    <h1>{{trans('pages.helloworld')}}</h1>
-    <p>{{trans('pages.description')}}</p>
+{{-- hier komen alle sponsors met hun logo --}} 
+
+<div class="row">
+  <div class="col-md-offset-3 col-md-2 ">
+    <a href="http://www.rodekruisvlaanderen.be" class="thumbnail" target='_new'>
+      {{HTML::image('img/sponsors/rklogo01.png') }}
+    </a>
+  </div>
+  <div class="col-md-2">
+
+	    <a href="http://www.macopharma.com" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/macopharma.png') }}
+	    </a>  	 	
+
+
+	    <a href="http://www.caf-dcf.dotnet17.hostbasket.com/" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/cafdcf.png') }}
+	    </a>  	 	
+ 	 
+  </div>
+
+  <div class="col-md-2">
+
+	    <a href="http://www.orthoclinical.com/en-be/Pages/Home.aspx" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/ocd_logo_color.png') }}
+	    </a>  	 	
+
+	    <a href="http://www.fresenius-kabi.com" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/fresenius-kabi.png') }}
+	    </a>  	 	
+ 	 
+  </div>  
+</div>
+
+<div class="row">
+  <div class="col-md-offset-3 col-md-2 ">
+    <a href="http://www.fenwalinc.eu/" class="thumbnail" target='_new'>
+      {{HTML::image('img/sponsors/fenwallogo.png') }}
+    </a>
+  </div>
+  <div class="col-md-2">
+
+	    <a href="http://cerus.com" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/cerus_logo.png') }}
+	    </a>  	 	
+	 
+  </div>
+
+  <div class="col-md-2">
+
+	    <a href="http://www.sarstedt.com/php/main.php" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/sarsted_s.png') }}
+	    </a>  	 	
+	 
+  </div>  
+</div>
+
+<div class="row">
+  <div class="col-md-offset-3 col-md-2 ">
+    <a href="http://www.terumo-europe.com/" class="thumbnail" target='_new'>
+      {{HTML::image('img/sponsors/terumologo_s.png') }}
+    </a>
+  </div>
+  <div class="col-md-2">
+
+	    <a href="http://www.octapharma.com" class="thumbnail" target='_new'>
+	      {{HTML::image('img/sponsors/octa_ms_ReflexBlue.png') }}
+	    </a>  	 		 
   </div>
 </div>
 
-@if (Sentry::check() )
-	<div class="panel panel-success">
-		 <div class="panel-heading">
-			<h3 class="panel-title"><span class="glyphicon glyphicon-ok"></span> {{trans('pages.loginstatus')}}</h3>
-		</div>
-		<div class="panel-body">
-			<p><strong>{{trans('pages.sessiondata')}}:</strong></p>
-			<pre>{{ var_dump(Session::all()) }}</pre>
-		</div>
+<div class='row'>
+	<div class='col-md-offset-3 col-md-2'>
+		{{ link_to_route('disclaimer', 'Disclaimer', null, array('class' => 'btn btn-default')) }} 
 	</div>
-@endif 
+</div>
 
-test de databank
-<?php
-$users = User::all();
-var_dump($users);
-?>
  
 @stop

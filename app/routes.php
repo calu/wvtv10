@@ -57,6 +57,19 @@ Route::get('/', array('as' => 'home', function()
 //     //return Response::view('errors.missing', array(), 404);
 // });
 
+// Route voor sponsors
+Route::get('disclaimer', array('as' => 'disclaimer', function()
+{
+	return View::make('disclaimer');
+}));
+
+// Routes uit de menubalk
+// Route::get('inhoud', function(){ return View::make('contents/index'); });
+Route::get('inhoud', array('as' => 'inhoud', function(){ return View::make('contents/index'); }));
+
+
+
+
 
 
 
