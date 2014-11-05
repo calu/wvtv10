@@ -42,7 +42,7 @@ class UserMailer extends Mailer {
 	 */
 	public function forgotPassword($email, $userId, $resetCode)
 	{
-		$subject = 'Password Reset Confirmation | Laravel4 With Sentry';
+		$subject = 'Bevestiging voor het herinstellen van een wachtwoord voor WVTV';
 		$view = 'emails.auth.reset';
 		$data['userId'] = $userId;
 		$data['resetCode'] = $resetCode;
@@ -60,7 +60,7 @@ class UserMailer extends Mailer {
 	 */
 	public function newPassword($email, $newPassword)
 	{
-		$subject = 'New Password Information | Laravel4 With Sentry';
+		$subject = 'Informatie omtrent het nieuwe wachtwoord voor WVTV';
 		$view = 'emails.auth.newpassword';
 		$data['newPassword'] = $newPassword;
 		$data['email'] = $email;

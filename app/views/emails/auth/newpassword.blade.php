@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="nl">
 	<head>
 		<meta charset="utf-8">
 	</head>
@@ -8,6 +8,6 @@
 
 		<p><blockquote>{{{ $newPassword }}}</blockquote></p>
 		<p>{{trans('pages.thankyou')}}, <br />
-			~The Admin Team</p>
+			~De webbeheerder</p>
 	</body>
 </html>
