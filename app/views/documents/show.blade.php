@@ -1,0 +1,1 @@
+/home/vagrant/Code/wvtv10/app/views/documents/show.blade.php

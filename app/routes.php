@@ -72,6 +72,12 @@ Route::get('beheer', function(){ return View::make('beheers/index'); });
 Route::get('beheer/init', 'BeheersController@init');
 Route::get('beheer/checkmail', 'BeheersController@checkmail');
 
+// Routes voor Bestuur
+Route::resource('bestuurs', 'BestuursController');
+
+// Routes voor Documenten
+Route::resource('documents', 'DocumentsController');
+
 
 
 
