@@ -107,7 +107,249 @@ class BeheersController extends \BaseController {
 	 */
 	public function init()
 	{
-		print('De initialisatie moet je nog uitvoeren [BeheersController@init]');
+		// We beginnen met de UserExtra voor de 3 bestaande users
+		//    id = 1  johan.calu@gmail.com
+	 	$date = new DateTime;
+		$extraID = DB::table('user_extras')->insertGetID(
+			array(
+			  'user_id' => 1,
+			  'birthdate' => "1951-09-06",
+			  'street' => "rozenlaan",
+			  'housenr' => "26",
+			  'box' => '',
+			  'city' => "Oostende",
+			  'zip' => "8400",
+			  'country' => "Belgium",
+			  'phone' => "059 123456",
+			  'gsm' => "0476 654321",
+			  'workplace' => "thuis",
+			  'position' => "the boss",
+			  'title' => "dr",
+			  'diploma' => "dr.",
+			  'created_at' => $date,
+			  'updated_at' => $date,
+			)
+		);
+		
+		//    id = 2 johan.calu@telenet.be
+		$extraID = DB::table('user_extras')->insertGetID(
+			array(
+			  'user_id' => 2,
+			  'birthdate' => "1951-09-06",
+			  'street' => "rozenlaan",
+			  'housenr' => "26",
+			  'box' => '',
+			  'city' => "Kortrijk",
+			  'zip' => "8500",
+			  'country' => "Belgium",
+			  'phone' => "059 123456",
+			  'gsm' => "0476 654321",
+			  'workplace' => "thuis",
+			  'position' => "the boss",
+			  'title' => "dr",
+			  'diploma' => "dr.",
+			  'created_at' => $date,
+			  'updated_at' => $date,
+			)
+		);
+		
+		//    id = 3 johan@johancalu.be
+		$extraID = DB::table('user_extras')->insertGetID(
+			array(
+			  'user_id' => 3,
+			  'birthdate' => "1951-09-06",
+			  'street' => "rozenlaan",
+			  'housenr' => "26",
+			  'box' => '',
+			  'city' => "Brugge",
+			  'zip' => "8000",
+			  'country' => "Belgium",
+			  'phone' => "059 123456",
+			  'gsm' => "0476 654321",
+			  'workplace' => "thuis",
+			  'position' => "the boss",
+			  'title' => "dr",
+			  'diploma' => "dr.",
+			  'created_at' => $date,
+			  'updated_at' => $date,
+			)
+		);
+	
+	    // haal de oude personen op uit wvtv_persons en bestuur uit wvtv_bestuur
+	    $persons = DB::select("SELECT * FROM wvtv_person");
+		$bestuur = DB::select("SELECT * FROM wvtv_bestuur");	
+		
+		$index = 0;
+		foreach( $persons AS $person)
+		{
+			// De user met id = 1 is in de vroegere databank de administrator en moet hier niet opnieuw ingevuld worden
+			if ($person->id != 1)
+			{
+				// ga na of deze persoon reeds bestaat - het e-mail adres is uniek, dus daar testen we op
+				$personEmail = $person->email;
+				$aantal = DB::table('users')->where('email','=',$personEmail)->count();
+				// als er reeds users met dit e-mail adres in onze nieuwe databank zit
+				if ($aantal > 0)
+				{
+					print("<br />#### deze gebruiker ({$personEmail}) bestaat reeds!");
+				} else {
+					// deze user toevoegen aan User
+					$thisUser = Sentry::getUserProvider()->create( array(
+						'email' => $person->email,
+						'password' => "wvtvnieuw",
+						'first_name' => $person->firstname,
+						'last_name' => $person->lastname,
+						'activated' => 1,
+					));
+					
+					// vervolgens de gegevens voor deze persoon toevoegen in user_extras
+					$date = new DateTime;
+					$extraID = DB::table('user_extras')->insertGetID(
+					  array(
+					  	'user_id' => $thisUser->id,
+						'birthdate' => $person->birthdate,
+						'street' => $person->address,
+						'housenr' => $person->housenr,
+						'box' => '',
+						'city' => $person->city,
+						'zip' => $person->zip,
+						'country' => $person->country,
+						'phone' => $person->phone,
+						'gsm' => $person->gsm,
+						'workplace' => $person->werkplaats,
+						'position' => $person->functie,
+						'title' => $person->title,
+						'diploma' => $person->diploma,
+						'created_at' => $date,
+						'updated_at' => $date,					  	
+					  )
+					 );
+					
+					 // Nu kijken we of dit een bestuurder is
+					 $member = self::isBestuurder($person->id, $bestuur);
+					 if ($member != null)
+					 {
+					 	// toevoegen aan Bestuur
+					 	$bestuurID = DB::table('bestuurs')->insertGetID(
+					 		array(
+					 			'user_id' => $thisUser->id,
+					 			'bestuursfunctie' => $member->bestuursfunctie,
+					 			'sortnr' => $index++,
+					 			'created_at' => $date,
+					 			'updated_at' => $date,
+							)
+						);
+					 }
+					 print("<br /> user {$person->email} werd uitgeschreven");
+				}
+				
+			}
+		}
+
+        print("<br />Nu voegen we ook de diverse documenten toe");
+        $documenten = DB::select('SELECT * FROM wvtv_documenten');
+		foreach($documenten AS $document)
+		{
+			$docok = DB::table('documents')->insertGetID(
+				array(
+					'title' => $document->title,
+					'description' => $document->description,
+					'url' => $document->url,
+					'date' => $document->date,
+					'sortnr' => $document->sortnr,
+					'localfilename' => $document->localfilename,
+					'author' => $document->author,
+					'alwaysvisible' => $document->alwaysvisible,
+					'type' => 'document'
+				)
+			);
+			
+		}		
+	    print('<br />Alle documenten overgeplaatst');
+	 
+		$links = DB::select('SELECT * FROM wvtv_links');
+		foreach($links AS $link)
+		{
+			$linkok = DB::table('documents')->insertGetID(
+				array(
+					'title' => $link->title,
+					'description' => $link->description,
+					'url' => $link->url,
+					'sortnr' => $link->sortnr,
+					'localfilename' => $link->localfilename,
+					'author' => $link->author,
+					'alwaysvisible' => $link->alwaysvisible,
+					'type' => 'links'
+				)
+			);
+		}
+	    print('<br />Alle links overgeplaatst.');
+	 	
+	 	$navormingen = DB::select('SELECT * FROM wvtv_navorming');
+		foreach($navormingen AS $navorming)
+		{
+			$linkok = DB::table('documents')->insertGetID(
+				array(
+					'title' => $navorming->title,
+					'description' => $navorming->description,
+					'url' => $navorming->url,
+					'sortnr' => $navorming->sortnr,
+					'localfilename' => $navorming->localfilename,
+					'author' => $navorming->author,
+					'alwaysvisible' => $navorming->alwaysvisible,
+					'type' => 'navorming'
+				)
+			);
+		}
+        print('<br />Alle navormingen overgeplaatst');
+		
+		
+		$transfusies = DB::select('SELECT * FROM wvtv_transfusie');
+		foreach($transfusies AS $transfusie)
+		{
+			$transfusieok = DB::table('documents')->insertGetID(
+				array(
+					'title' => $transfusie->title,
+					'description' => $transfusie->description,
+					'url' => $transfusie->url,
+					'sortnr' => $transfusie->sortnr,
+					'localfilename' => $transfusie->localfilename,
+					'author' => $transfusie->author,
+					'alwaysvisible' => $transfusie->alwaysvisible,
+					'type' => 'transfusie'
+				)
+			);			
+		}
+		print("<br />Alle transfusies overgeplaatst");
+	
+
+		$wetgeving = DB::select('SELECT * FROM wvtv_wetgeving');
+		foreach($wetgeving AS $wet)
+		{
+			$wetgevingok = DB::table('documents')->insertGetID(
+				array(
+					'title' => $wet->title,
+					'description' => $wet->description,
+					'url' => $wet->url,
+					'sortnr' => $wet->sortnr,
+					'localfilename' => $wet->localfilename,
+					'author' => null,
+					'alwaysvisible' => $wet->alwaysvisible,
+					'type' => 'wetgeving'
+				)
+			);			
+		}
+		print("<br />Alle wetgeving overgeplaatst");
 	}
+
+     function isBestuurder($id, $bestuur)
+	 {
+	 	foreach($bestuur AS $member)
+		{
+			if ($member->user_id == $id)
+				return $member;
+		}		
+	 	return null;
+	 }
 
 }

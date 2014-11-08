@@ -49,7 +49,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 		return $this->email;
 	}
 	
-public function getRememberToken()
+	public function getRememberToken()
 	{
 	    return $this->remember_token;
 	}
@@ -63,5 +63,12 @@ public function getRememberToken()
 	{
 	    return 'remember_token';
 	}	
-
+	
+	/*
+	 * foreign key voor UserEXtra
+	 */
+	public function userExtra(){
+		return $this->belongsTo('UserExtra');
+	}
+	
 }
