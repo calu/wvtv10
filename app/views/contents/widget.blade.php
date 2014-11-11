@@ -11,14 +11,19 @@
  
 // We beginnen met het ophalen van een shortlist
 $lijst = AppHelper::getShortlist($rubriek);
- 
 ?>
 
 <div>
 	<ul class='shorttable'>
-		<li>een</li>
-		<li>twee</li>
-		<li>drie</li>
+		@foreach($lijst AS $item)
+			<li>{{$item}}</li>
+		@endforeach
 	</ul>
+	<div style='clear:both'>
+		{{-- link toon de volledige lijst --}}
+
+		<?php $url = url('volledigelijst',$parameters = array('rubriek' => $rubriek)); ?>
+		<a href='{{ $url }}' class='groen'>toon de volledige lijst</a>
+	</div>	
 </div>
 

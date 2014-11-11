@@ -41,3 +41,14 @@ li.menu{
 	border : 1px solid red;
 	padding : 10px;
 }
+
+.shorttable{
+	list-style : none;
+	margin : 0;
+	padding : 0;
+	float : left;
+}
+
+.groen{
+	color : green;
+}
