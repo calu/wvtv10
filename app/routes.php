@@ -83,7 +83,12 @@ Route::resource('bestuurs', 'BestuursController');
 // Routes voor Documenten
 Route::resource('documents', 'DocumentsController');
 
-
+// Route voor updown
+Route::get('arrow/{id}/{rubriek}/{direction}', function($id, $rubriek,$direction){
+	AppHelper::moveItem($id, $rubriek, $direction);
+	return View::make('contents/volledigelijst')->with('rubriek', $rubriek);
+//	 print("id = {$id} en rubriek = {$rubriek} en direction = {$direction}");
+});
 
 
 

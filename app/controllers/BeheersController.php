@@ -179,7 +179,7 @@ class BeheersController extends \BaseController {
 	    $persons = DB::select("SELECT * FROM wvtv_person");
 		$bestuur = DB::select("SELECT * FROM wvtv_bestuur");	
 		
-		$index = 0;
+		$index = 1;
 		foreach( $persons AS $person)
 		{
 			// De user met id = 1 is in de vroegere databank de administrator en moet hier niet opnieuw ingevuld worden

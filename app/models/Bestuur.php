@@ -66,10 +66,10 @@ class Bestuur extends \Eloquent {
 		foreach( $bestuur AS $item)
 		{
 			$temp = null;
-			$temp['id'] = $item->user->id;
+			$temp['id'] = $item->id;
 			$temp['first_name'] = $item->user->first_name;
 			$temp['last_name'] = $item->user->last_name;
-			$extrafull = UserExtra::where('user_id',$temp['id'])->get();
+			$extrafull = UserExtra::where('user_id',$item->user->id)->get();
 			$extra = $extrafull[0];
 			$temp['phone'] = $extra->phone;
 			$temp['gsm'] = $extra->gsm;
@@ -136,5 +136,46 @@ class Bestuur extends \Eloquent {
 		$ret .= "<td>{$element['bestuursfunctie']}</td>";
 		if ($isAdmin) $ret .= "<td>".AppHelper::makeEditButtons('bestuur', $element['id'])."</td>";
 		return $ret;
-	  }
+	  } 
+
+	  /*
+	   * moveItem($id, $direction)
+	   * 
+	   * @purpose : voor de bestuursleden ga naar boven of beneden
+	   * 
+	   * @args : 
+	   *    id - de id van dit item in tabel bestuur
+	   *    direction - up of down
+	   * @return : success
+	   */
+	   public static function moveItem($id, $direction)
+	   {
+	   		$item = DB::table('bestuurs')->where('id', $id)->get();
+			$sortnr = $item[0]->sortnr;
+			
+			if ($direction == 'up')
+			{
+				if ($sortnr == 1) return;
+				// zoek de vorige
+				$vorige = DB::table('bestuurs')->where('sortnr', ($sortnr-1))->get();
+				// verwissel de 2
+				DB::table('bestuurs')->where('id', $id)->update(array( 'sortnr' => $sortnr-1));
+				DB::table('bestuurs')->where('id', $vorige[0]->id)->update(array( 'sortnr' => $sortnr));
+			}
+			
+			if ($direction == 'down')
+			{
+				// Zoek het hoogste sortnr
+				$max_sortnr = DB::table('bestuurs')->max('sortnr');
+				// Als het sortnr >= max_sortnr --> return
+				if ($sortnr >= $max_sortnr) return;
+				
+				// zoek het volgend item ( dus met sortnr+1)
+				$volgend = DB::table('bestuurs')->where('sortnr', ($sortnr+1))->get();
+				// verwissel de sortnrs van deze items
+				DB::table('bestuurs')->where('id', $id)->update( array( 'sortnr' => $sortnr+1));
+				DB::table('bestuurs')->where('id', $volgend[0]->id)->update( array('sortnr' => $sortnr));
+			}
+			return;
+	   }
 }
