@@ -74,8 +74,8 @@ class AppHelper {
 	 {
 	 	$urledit = url('edit', $parameters= array('id' => $id, 'rubriek' => $rubriek));
 		$urldelete = url('delete', $parameters = array('id'=>$id, 'rubriek' => $rubriek));
-		$ret = "<a href='{{ $urledit }}' rel='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
-		$ret .= " <a href='{{ $urldelete }}' rel='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
+		$ret = "<a href='$urledit' rel='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
+		$ret .= " <a href='$urldelete' rel='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
 		return $ret;
 	 }
 	 

@@ -90,6 +90,37 @@ Route::get('arrow/{id}/{rubriek}/{direction}', function($id, $rubriek,$direction
 //	 print("id = {$id} en rubriek = {$rubriek} en direction = {$direction}");
 });
 
+// Routes voor edit in fulllist
+Route::get('edit/{id}/{rubriek}', function($id, $rubriek){
+	switch( $rubriek )
+	{
+		case 'bestuur' :
+			//return Redirect::route('bestuurs.edit', array($id));
+			//Redirect::action('bestuurs/edit', array('id' => $id));
+			return Redirect::action('BestuursController@edit', array('id' => $id));
+			break;
+		default :
+			die("[routes@get(edit/id/rubriek)] - de rubriek {$rubriek} werd nog niet geïmplementeerd");
+	}
+	die("[Routes.php] - geen rubriek ! edit/{$id}/{$rubriek}");
+});
+
+// Routes voor edit in fulllist
+Route::get('bestuurs/delete/{id}', array('as' => 'bestuurs.delete', 'uses' => 'BestuursController@destroy'));
+Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
+	switch( $rubriek )
+	{
+		case 'bestuur' :
+			// die("[Routes.php] temp - delete/{$id}/{$rubriek}");
+			return Redirect::action('bestuurs.delete', array($id));
+			//return Redirect::action('BestuursController@destroy', array('id' => $id));
+			break;
+		default:
+			die("[routes@get(delete/id/rubriek)] - de rubriek {$rubriek} werd nog niet geïmplementeerd");
+	}
+	die("[Routes.php] - delete/{$id}/{$rubriek}");
+});
+
 
 
 

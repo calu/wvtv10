@@ -4,11 +4,11 @@ class Bestuur extends \Eloquent {
 
 	// Add your validation rules here
 	public static $rules = array(
-		// 'title' => 'required'
+		'id' => 'required',
 	);
 
 	// Don't forget to fill this array
-	protected $fillable = array();
+	protected $fillable = array('bestuursfunctie');
 	
 	/*
 	 * foreign key voor de tabel User
@@ -178,4 +178,22 @@ class Bestuur extends \Eloquent {
 			}
 			return;
 	   }
+
+		/*
+		 * getFullname
+		 * 
+		 * @purpose : zoek in users de voor- en familienaam van dit bestuurslid
+		 * 
+		 * @args :
+		 *    - user_id : het veld user_id uit de tabel Bestuur van deze entry
+		 * 
+		 * @returns : een string met de volledige naam
+		 */
+
+		public static function getFullname($user_id)
+		{
+			$user = User::find($user_id);
+			$naam = $user->first_name." ".$user->last_name;
+			return $naam;
+		}
 }

@@ -65,7 +65,6 @@ class BestuursController extends \BaseController {
 	public function edit($id)
 	{
 		$bestuur = Bestuur::find($id);
-
 		return View::make('bestuurs.edit', compact('bestuur'));
 	}
 
@@ -85,10 +84,9 @@ class BestuursController extends \BaseController {
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
-
 		$bestuur->update($data);
+		return Redirect::to('/volledigelijst/bestuur');
 
-		return Redirect::route('bestuurs.index');
 	}
 
 	/**
@@ -99,9 +97,29 @@ class BestuursController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		// Haal alle items - geordend volgens sortnr
+		$bestuurlijst = Bestuur::all()->sortBy('sortnr');
+		// Zoek het item met id
+		$index = 0;
+		$found = false;
+		while ($index < sizeof($bestuurlijst) && !$found)
+		{
+			$item = $bestuurlijst[$index];
+			if ($item->id == $id) { $found = true; break; }
+			$index++;
+		}
+		$sortnr = $item->sortnr;
+		// vervang de sortnrs van de volgende
+		for ($i = $index+1; $i < sizeof($bestuurlijst); $i++)
+		{
+			// $bestuurlijst[$i]->sortnr = $sortnr++;
+			$idtemp = $bestuurlijst[$i]->id;
+			$item = Bestuur::findOrFail($idtemp);
+			$item->sortnr = $sortnr++;
+			$item->save();
+		}
 		Bestuur::destroy($id);
-
-		return Redirect::route('bestuurs.index');
+		return Redirect::to('/volledigelijst/bestuur');
 	}
 
 }
