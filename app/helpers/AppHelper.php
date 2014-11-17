@@ -125,41 +125,28 @@ class AppHelper {
 			die("TODO [AppHelper:moveItem]");
 		}
 		var_dump($item); die('xx');
-		
-		
-	  }
-	 
-	 /*
-
-		
-  $item = DB::table($tabel)->where('user_id', '=', $id)->get();
-  $sortnr = $item[0]->sortnr ;
-  if ($direction == 'up')
-  {
-    if ( $sortnr == 1) return;
-    // Nu moeten we de vorige vinden 
-    $itemhoger = DB::table($tabel)->where('sortnr', '=', ($sortnr-1))->get();
-    // en verwissel sortnr met de huidige
-    DB::table($tabel)->where('user_id',$id)->update(array('sortnr' => $sortnr-1));
-    DB::table($tabel)->where('id', $itemhoger[0]->id)->update(array('sortnr' => $sortnr));
-  }
-		
-  if ($direction == 'down')
-  {
-    // Wat is het hoogste sortnr?
-    $max_sortnr = DB::table($tabel)->max('sortnr');
-    // Als het sortnr >= max_sortnr --> return
-    if ( $sortnr >= $max_sortnr) return;
 			
-    // Zoek volgend item met sortnr+1
-    $itemvolgend = DB::table($tabel)->where('sortnr', ($sortnr+1))->get();
-    // verwissel de sortnrs
-    DB::table($tabel)->where('user_id', $id)->update(array('sortnr' => $sortnr+1));
-    DB::table($tabel)->where('id', $itemvolgend[0]->id)->update(array('sortnr' => $sortnr));
-  }
-  return;
-}
-	  */
+	  }
+	  
+	  /*
+	   * getRubriekpointer
+	   * 
+	   * @purpose : aan de hand van de rubriek naam, maken we nu de 'rubriek' pointer
+	   * 
+	   * @args : de naam van de rubriek
+	   * @return : de rubriek pointer
+	   * 
+	   */
+	   public static function getRubriekpointer($rubriek)
+	   {
+	   	switch( $rubriek)
+		{
+			case 'bestuur' : $ret = 'bestuurs'; break;
+			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
+		}
+		return $ret;
+	   }
+	 
 }
 
 ?>

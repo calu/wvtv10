@@ -37,7 +37,15 @@ class BestuursController extends \BaseController {
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
-
+		
+		// in dit geval moet de user_id ook ingevuld zijn !!!!!
+		
+		// en ook sortnr moet aangevuld worden
+		//    zoek het hoogste sortnr aanwezig
+		$max_sortnr = DB::table('bestuurs')->max('sortnr'); 
+		$data['sortnr'] = $max_sortnr+1;
+		
+//		var_dump($data);die("xxx");
 		Bestuur::create($data);
 
 		return Redirect::route('bestuurs.index');

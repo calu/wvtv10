@@ -4,7 +4,7 @@ class Bestuur extends \Eloquent {
 
 	// Add your validation rules here
 	public static $rules = array(
-		'id' => 'required',
+//		'id' => 'required',
 	);
 
 	// Don't forget to fill this array
@@ -196,4 +196,31 @@ class Bestuur extends \Eloquent {
 			$naam = $user->first_name." ".$user->last_name;
 			return $naam;
 		}
+		
+		/*
+		 * getPotentialusers
+		 * 
+		 * @purpose : zoek alle users, behalve deze die reeds in bestuur zitten en de webbeheerder (3 eerste)
+		 * 
+		 * @args : geen
+		 * @return : array van de users (als array)
+		 */
+		 public static function getPotentialusers()
+		 {
+		 	$bestuurders = Bestuur::all()->toArray();
+			foreach($bestuurders AS $bestuurder)
+			{
+				$bestuur_rij[] = $bestuurder['user_id'];
+			}
+			$users = User::all()->toArray();
+			foreach($users AS $user)
+			{
+				$id = $user['id'];
+				if ( $id > 3 && !in_array($id, $bestuur_rij))
+				{
+					$ret[$user['id']] = $user['first_name']." ".$user['last_name'];
+				}
+			}
+			return $ret;
+		 }
 }
