@@ -68,6 +68,9 @@ require __DIR__.'/../filters.php';
 // Require the Observables file.
 require __DIR__.'/../observables.php';
 
+// toegevoegd
+require __DIR__.'/../validations.php';
+
 /*
 |--------------------------------------------------------------------------
 | Prep Sentry for dependency Injection

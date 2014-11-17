@@ -15,6 +15,8 @@ class Elegant extends Eloquent
 		'alpha' => 'Het veld :attribute mag enkel letters bevatten',
 		'uniek' => 'Deze gebruiker werd reeds ingeschreven',
 		'countrychosen' => 'Je moet een land kiezen',
+		'userChosen' => 'Je moet een gebruiker kiezen',
+		'user_chosen' => 'Kies een valide gebruiker',
 	);
 
     public function validate($data)

@@ -5,6 +5,7 @@ class Bestuur extends \Eloquent {
 	// Add your validation rules here
 	public static $rules = array(
 //		'id' => 'required',
+		'user_id' => 'userChosen',
 	);
 
 	// Don't forget to fill this array
@@ -213,6 +214,8 @@ class Bestuur extends \Eloquent {
 				$bestuur_rij[] = $bestuurder['user_id'];
 			}
 			$users = User::all()->toArray();
+			
+			$ret[-1] = "--- maak je keuze ---";
 			foreach($users AS $user)
 			{
 				$id = $user['id'];
