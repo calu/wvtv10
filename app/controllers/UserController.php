@@ -478,8 +478,48 @@ class UserController extends BaseController {
             return Redirect::to('users');
         }
 	}
-
-
+	
+	/*
+	 * changeprofile
+	 * 
+	 * @purpose : start de Form changeprofile waarin je alle gegevens van deze person (User, UserExtra, Group ....) kan aanpassen
+	 * @remark : je komt hier vanuit het startscherm widget verander je (eigen) profiel. Of als secretaris om het profiel van iemand aan te passen
+	 * @args : id --> de id van de user die aangepast moet worden
+	 * @return : success
+	 * 
+	 */
+	public function changeprofile($id)
+	{
+		$user = User::find($id);
+		if ($user == null || !is_numeric($id))
+		{
+			return \App::abort(404);
+		}
+		
+		$currentGroups = $user->getGroups()->toArray();
+		$userGroups = array();
+		foreach ($currentGroups as $group) {
+			array_push($userGroups, $group['name']);
+		}
+		$allGroups = $this->group->all();
+		
+		return View::make('users.changeprofile', array('id' => $id))->with('user', $user)->with('userGroups', $userGroups)->with('allGroups', $allGroups);
+	}
+	
+	/*
+	 * storeprofile
+	 * 
+	 * @purpose : de data verzameld in het formulier 'verander je profiel' wordt hier gevalideerd en als ok gespaard in de 
+	 *   diverse tabellen : users, userextras
+	 * 
+	 * @args : Input
+	 * @return : success or errors
+	 */
+	public function storeprofile()
+	{
+		$data = Input::all();
+		die("storeprofile");
+	}
 }
 
 	

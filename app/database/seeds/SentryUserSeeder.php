@@ -15,18 +15,24 @@ class SentryUserSeeder extends Seeder {
 	        'email'    => 'johan.calu@gmail.com',
 	        'password' => 'wvtvcalu',
 	        'activated' => 1,
+	        'first_name' => 'johan',
+	        'last_name' => 'caluAdmin',
 	    ));
 		
 		Sentry::getUserProvider()->create(array(
 		  'email'    => 'johan.calu@telenet.be',
 		  'password' => 'wvtvcalu',
 		  'activated' => 1,
+	        'first_name' => 'johan',
+	        'last_name' => 'caluSecretary',		  
 		));		
 
 	    Sentry::getUserProvider()->create(array(
 	        'email'    => 'johan@johancalu.be',
 	        'password' => 'wvtvcalu',
 	        'activated' => 1,
+	        'first_name' => 'johan',
+	        'last_name' => 'caluUser',	        
 	    ));
 	}
 

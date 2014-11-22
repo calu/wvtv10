@@ -351,5 +351,24 @@ class BeheersController extends \BaseController {
 		}		
 	 	return null;
 	 }
+	 
+	 /*
+	  * editprofile
+	  */
+	 public function editprofile()
+	 {
+	 	return View::make('beheers.userchoice');
+	 }
+
+     /*
+	  * userchosen
+	  * 
+	  * hier kom je vanuit het formulier dat je met editprofile hebt opgeroepen
+	  */
+	 public function userchosen()
+	 {
+	 	$item = Input::get('id');
+	 	return Redirect::route('changeprofile', array('id' => $item));
+	 }
 
 }

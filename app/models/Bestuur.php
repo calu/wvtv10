@@ -31,6 +31,7 @@ class Bestuur extends \Eloquent {
 		$bestuur = Bestuur::all()->sortby('sortnr')->toArray();
 		$size = sizeof($bestuur);
 		$max = ($size > 4)?4:$size;
+		$ret = array();
 
 		for ($i=0; $i < $max; $i++)
 		{
@@ -226,4 +227,16 @@ class Bestuur extends \Eloquent {
 			}
 			return $ret;
 		 }
+		 
+		 /**
+		 * is the member with user_id == id in bestuur?
+		 * 
+		 * @param int $id (de user_id of the member)
+		 * @return true of false
+		 */
+		 public static function isMemberOfBestuur($id)
+		 {
+		 	$result = Bestuur::where('user_id', "$id")->count();
+			return $result == 1;
+		 }	
 }

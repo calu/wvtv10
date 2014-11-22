@@ -56,3 +56,85 @@ li.menu{
 .noformfield{
 	padding-top: 0.5em;
 }
+
+.grijstitel{
+	color : white;
+	background-color : gray;
+	text-align : center;
+	margin-bottom : 5px;
+	margin-top : 5px;		
+	width : 100%;	
+}
+
+.fullwidth{
+	width: 100%
+}
+
+/**** layout profiel edit pagina ******/
+.space-10,
+.space-20,
+.label-1,
+.label-60,
+.label-80,
+.label-90,
+.label-100,
+.label-120,
+.mycol-70,
+.mycol-100,
+.mycol-120,
+.mycol-200,
+.mycol-250,
+.mycol-400,
+.mycol-600
+{
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-left : 10px;
+  margin-right : 10px;  
+  float : left;	
+}
+/**** LARGE DESKTOP ***  GEEL ***/
+@media( min-width : 1200px){
+	.titeltekst { background-color : yellow; }
+	
+	.space-10 { width : 10px; }
+	.space-20 { width : 20px; }
+	.label-1 { float :left; width : 40px; }
+	.label-60 { float : left; width : 60px; }
+	.label-80 { float : left; width : 80px;}
+	.label-90 { float : left; width : 90px;}
+	.label-100 { float : left; width : 100px;}
+	.label-120 { float : left; width : 120px;}
+	.mycol-70 { float : left; width : 70px;}
+	.mycol-100 { width : 100px; }
+	.mycol-120 { width : 120px; }
+	.mycol-200 { width : 200px; }
+	.mycol-250 { width : 250px; }
+	.mycol-400 { width : 400px; }
+	.mycol-600 { width : 600px; }
+}
+
+/**** TABLET LANDSCAPE *** BLUE ***/
+@media (min-width: 979px) and (max-width: 1200px) {
+	.titeltekst { background-color : blue; }	
+}
+
+/**** IPAD VERTIKAAL (TABLED PORTRAIT) *** RED ***/
+@media (min-widt:768px) and (max-width: 979px){
+	.titeltekst { background-color : red; }
+}
+
+/**** LANDSCAPE PHONE TO PORTRAIT TABLET *** GREEN ***/  /** niet iphone? **/
+@media (max-width : 979px){
+	.titeltekst { background-color : green; }
+}
+
+/**** LANDSCAPE PHONE AND DOWN *** GRAY ***/
+@media (max-width : 480px){
+	.titeltekst { background-color : #999999 ; }
+}
+
+/**** EINDE : layout profiel edit pagina ******/
+

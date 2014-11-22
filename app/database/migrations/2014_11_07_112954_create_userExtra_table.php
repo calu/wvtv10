@@ -15,7 +15,7 @@ class CreateUserExtraTable extends Migration {
 		Schema::create('user_extras', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('user_id')->unsigned()->index();
+			$table->integer('user_id')->unsigned()->nullable();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->date('birthdate')->nullable();
 			$table->string('street')->nullable();

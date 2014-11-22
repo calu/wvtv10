@@ -28,7 +28,7 @@ return array(
 	
 	'user'            => "Lid",
 	
-	'groups'          => "Groupen",
+	'groups'          => "Groepen",
 	
 	'helloworld'      => "Hello World!",
 	
@@ -70,21 +70,24 @@ return array(
 	
 	'title'                => "WVTV",
 	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
+	'changeprofile'   => "Verander het profiel van lid # ",
+	'persontitle'	=> 'Titel',		
+	'first_name'    => "Voornaam",	
+	'last_name'    => "Familienaam",	
+	'street'       => "Straat",
+	'housenr'	  	=> 'Nummer',
+	'zip'          => "Postcode",
+	'city'			=> 'Stad',
+	'country'		=> 'Land',
+	'email'         => "E-mail",
+	'birthdate'		=> "Geboortedatum",
+	'phone'         => "Telefoon",
+	'gsm'			=> "GSM",
+	'diploma'       => "Diploma",
+	'position'		=> "Functie",
+	'workplace'     => "Werkplaats",
+	'lastloggedin'	=> "Laatste Login",
+	'inbeheer' => "is in beheer ?",
 	
 	''                => "",
 	

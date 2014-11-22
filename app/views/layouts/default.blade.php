@@ -24,7 +24,7 @@
 		{{HTML::style('http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css')}}
 		{{HTML::script('http://code.jquery.com/jquery-1.9.1.js')}}
 		{{HTML::script('http://code.jquery.com/ui/1.10.4/jquery-ui.js')}}
-		
+
 		<script>
 		$(function() {
 			$( ".datepicker" ).datepicker({

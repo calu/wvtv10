@@ -71,4 +71,33 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 		return $this->belongsTo('UserExtra');
 	}
 	
+	/*
+	 * getAllUsers
+	 * 
+	 * @purpose : In deze functie halen we alle gebruikers op, maar met een filter
+	 *    De filter voegt de 3 eerste users toe als het hier de beheerder is, anders niet
+	 * 
+	 * @return : array van users
+	 */
+	public static function getAllUsers()
+	{
+		$isChief = (Sentry::check() && (Sentry::getUser()->hasAccess('admin')) );
+		
+		if ($isChief)
+		{
+			$users = User::all();
+		} else 
+		{
+			$users = User::where('id', '>', 3)->get();	
+		}
+		
+		$ret[-1] = "--kies het lid--";
+		foreach($users AS $user)
+		{
+			$id = $user->id;
+			$ret[$id] = $user->first_name." ".$user->last_name;
+		}
+		return $ret;
+	}
+	
 }

@@ -4,13 +4,20 @@ class AppHelper {
 	
 	public static function getShortlist($rubriek)
 	{
+		if (Sentry::check())
+		{
+			$currentUser = Sentry::getUser()->id;
+			$urlprofiel = url('changeprofile', $parameters = array('id' => $currentUser));
+		}
+		
+
 		switch ($rubriek)
 		{
 			case 'bestuur' :
 				$ret = Bestuur::getShortlist();
 				break;
 			case 'profiel' :
-				$ret[] = "profiel bewerken";
+				$ret[] = "<a href = '$urlprofiel'>wijzig je profiel</a>";
 				$ret[] = "wachtwoord wijzigen";
 				break;
 			case 'navorming' :
@@ -146,7 +153,31 @@ class AppHelper {
 		}
 		return $ret;
 	   }
-	 
+
+	/*
+	 * enum_to_array
+	 * 
+	 * @purpose : voor de enum velden in de databank, halen we hier de onderscheiden waarden op
+	 * 
+	 * @args :
+	 *   - table : de tabel waaruit we het enum veld zullen halen
+	 *   - field : het veld dat als enum staat gedefinieerd
+	 * 
+	 * @returns : een array met de onderscheiden waarden in de enum van de tabel
+	 */
+	public static function enum_to_array($table, $field)
+	{
+		$result = DB::select("SHOW FIELDS FROM {$table} LIKE '{$field}'");
+		$resultvalue = $result[0]->Type;
+		preg_match('/enum\((.*)\)$/', $resultvalue, $matches);
+		$enum = array();
+		foreach( explode(',', $matches[1]) AS $value)
+		{
+			$v = trim( $value, "'");
+			$enum = array_add($enum, $v, $v);
+		}
+		return $enum;
+	}	 
 }
 
 ?>

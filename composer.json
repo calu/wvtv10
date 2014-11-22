@@ -2,13 +2,16 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"cartalyst/sentry": "2.1.*",
-		"codesleeve/asset-pipeline": "dev-master"
+		"codesleeve/asset-pipeline": "dev-master",
+		"webpatser/laravel-countries": "dev-master"
 	},
 	
 	"require-dev": {
 		"way/generators": "~2.6",
 		"mockery/mockery": "~0.9",
 		"phpunit/phpunit": "~4.0"
+		
+		
 	},
 	"autoload": {
 		"classmap": [

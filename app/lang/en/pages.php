@@ -68,23 +68,24 @@ return array(
 	
 	// 'listwith'     => "",
 	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
-	
-	''                => "",
+	'changeprofile'                => "Change the profile of user # ",
+	'persontitle'	=> 'Title',	
+	'first_name'    => "First name",
+	'last_name'    => "Last name",	
+	'street'       => "Street",
+	'housenr'	  	=> 'Housenr',
+	'zip'          => "Zip",
+	'city'			=> 'City',
+	'country'		=> 'Country',
+	'email'         => "E-mail",
+	'birthdate'		=> "Birthday",
+	'phone'         => "Phone",
+	'gsm'			=> "GSM",
+	'diploma'       => "Diploma",
+	'position'		=> "Position",
+	'workplace'     => "Workplace",
+	'lastloggedin'	=> "Last Login",
+	'inbeheer' => "is member of board ?",
 	
 	''                => "",
 	

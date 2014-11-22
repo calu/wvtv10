@@ -74,8 +74,14 @@ Route::get('volledigelijst/{rubriek}', function($rubriek){
 });
 
 // Routes voor het beheer onderdeel
+Route::resource('beheers', 'BeheersController');
 Route::get('beheer/init', 'BeheersController@init');
 Route::get('beheer/checkmail', 'BeheersController@checkmail');
+Route::get('beheer/editprofile', 'BeheersController@editprofile');
+Route::post('beheer/userchosen', array('uses' => 'BeheersController@userchosen'));
+
+Route::get('changeprofile/{id}', array('as' => 'changeprofile', 'uses' => 'UserController@changeprofile'));
+Route::post('storeprofile', array('as' => 'storeprofile', 'uses' => 'UserController@storeprofile'));
 
 // Routes voor Bestuur
 Route::resource('bestuurs', 'BestuursController');
