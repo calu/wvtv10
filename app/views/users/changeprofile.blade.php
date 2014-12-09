@@ -9,6 +9,7 @@
 $isAdmin = Sentry::check() && (Sentry::getUser()->hasAccess('admin') || Sentry::getUser()->hasAccess('secretary'));
 $extra = DB::table('user_extras')->where('user_id', $id)->first();
 
+if ($extra->birthdate == "0000-00-00") $extra->birthdate = null;
 $selectTitle = AppHelper::enum_to_array('user_extras', 'title');
 $selectCountry = DB::table('countries')->lists('name');
 array_unshift($selectCountry,"--- kies een land ---");
@@ -24,9 +25,16 @@ $urlterug = url('inhoud');
 	
 	{{-- formulier --}}
 	<div class='col-md-12 roodkader'>
-		{{ Form::open( array( 'method' => 'post', 'route' => 'storeprofile', 'class' => 'form-inline' )) }}
+		<h2 class='titeltekst'>{{ trans('pages.changeprofile') }} {{ $id }}</h2>
+		@if ($errors->has())
+			@foreach($errors->all() as $message)
+				<div class='well rood'>
+					{{ $message }}
+				</div>
+			@endforeach
+		@endif
 		
-			<h2 class='titeltekst'>{{ trans('pages.changeprofile') }} {{ $id }}</h2>
+		{{ Form::open( array( 'method' => 'post', 'route' => 'storeprofile', 'class' => 'form-inline' )) }}
 			
 			{{ Form::hidden('id', $id ) }}
 			
@@ -81,12 +89,17 @@ $urlterug = url('inhoud');
 				{{-- e-mail en geboortedatum --}}
 					{{ Form::label('edit-email', trans('pages.email'), array('class' => 'label-60 control-label' )) }}
 					{{ Form::text('email', $user->email, array('class' => 'mycol-200', 'placeholder' => trans('pages.email'), 'id' => 'edit_email' )) }}
+					
 					{{ ($errors->has('email') ? $errors->first('email') :  '' ) }}		
 					
 					{{ Form::label('edit-birthdate', trans('pages.birthdate'), array('class' => 'label-100 control-label' )) }}
 					{{ Form::text('birthdate', $extra->birthdate, array('class' => 'mycol-200 datepicker', 'placeholder' => trans('pages.birthdate'), 'data-datepicker' => 'datepicker', 'id' => 'edit_birthdate' )) }}
-					{{ ($errors->has('birthdate') ? $errors->first('birthdate') :  '' ) }}								
+													
 			</div>
+			@if ($errors->has('birthdate'))
+				<div class='rood'>{{ $errors->first('birthdate') }}</div>
+			@endif
+			
 			<div class='clearfix'>&nbsp;</div>
 			<div class='row'>
 				{{-- telefoon en gsm --}}
@@ -132,6 +145,7 @@ $urlterug = url('inhoud');
 				
 				// Als user activated is ... zet dan checked
 				if ($user->activated) $checked = 'checked'; else $checked = '';
+				if ($user->last_login) $last_login = $user->last_login; else $last_login = "nog nooit aangemeld";
 				?>
 				
 				<div class='grijstitel'>enkel voor beheerder</div>
@@ -146,7 +160,7 @@ $urlterug = url('inhoud');
 				<div class='clearfix'>&nbsp;</div>
 				<div class='row'>
 					{{ Form::label('edit-lastloggedin', trans('pages.lastloggedin'), array('class' => 'label-120 control-label')) }}
-					{{ Form::text('lastloggedin', $user->last_login, array('class'=>'mycol-200', 'placeholder' => '', 'disabled' => 'disabled', 'id' => 'lastloggedin')) }}
+					{{ Form::text('lastloggedin', $last_login, array('class'=>'mycol-200', 'placeholder' => '', 'disabled' => 'disabled', 'id' => 'lastloggedin')) }}
 				</div>
 				<div class='clearfix'>&nbsp;</div>
 				<div class='row'>

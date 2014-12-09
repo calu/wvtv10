@@ -3,7 +3,7 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface {
+class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface{
 
 	/**
 	 * The database table used by the model.
@@ -11,6 +11,12 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 * @var string
 	 */
 	protected $table = 'users';
+	
+	public static $rules=array(
+		'email' => 'required | email',
+		'first_name' => 'required | min:2',
+		'last_name' => 'required | min:2',
+	);
 
 	/**
 	 * The attributes excluded from the model's JSON form.

@@ -518,7 +518,134 @@ class UserController extends BaseController {
 	public function storeprofile()
 	{
 		$data = Input::all();
-		die("storeprofile");
+		$validator = Validator::make($data, User::$rules);
+		if ($validator->fails())
+		{
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
+		$result = $this->registerForm->save($data);
+		
+		// userExtra bekijken
+		$extradata = array(
+			'street' => $data['street'],
+			'housenr' => $data['housenr'],
+			'zip' => $data['zip'],
+			'city' => $data['city'],
+			'country' => $data['country'],
+			'birthdate' => $data['birthdate'],
+			'phone' => $data['phone'],
+			'gsm' => $data['gsm'],
+		);
+		
+		// bekijk hier manueel - omdat het met de validator niet werkt - de phone en de gsm
+		$phone = $data['phone'];
+		$gsm = $data['gsm'];
+		
+		$phoneStatus = ($phone == null || strlen(trim($phone) == 0) ? null : $phone);
+		$gsmStatus = ($gsm == null || strlen(trim($gsm) == 0) ? null : $gsm);
+		
+		if (!isset($phoneStatus))
+		{
+			$rules = array('gsm' => 'required|phonerule');
+			$input = array('gsm' => $gsm);
+			$message = array('gsm.phonerule' => 'Het gsm nummer is niet in het juiste formaat','gsm.required' => 'telefoon of GSM vereist');
+			$v = Validator::make($input,$rules, $message);
+			if ($v->fails())
+			{
+				return Redirect::back()->withErrors($v)->withInput();
+			}
+		}
+		
+		if (!isset($gsmStatus))
+		{
+			$rules = array('phone' => 'required|phonerule');
+			$input = array('phone' => $phone);
+			$message = array('phone.phonerule' => 'Het telefoonnummer is niet in het juiste formaat', 'phone.required' => 'telefoon of GSM vereist');
+			$v = Validator::make($input,$rules, $message);
+			if ($v->fails())
+			{
+				return Redirect::back()->withErrors($v)->withInput();
+			}			
+		}
+		
+		// Na de telefoon en GSM zijn er geen testen meer uit te voeren
+		// Dus nu moeten we alles opsparen
+		$user = User::findOrFail($data['id']);
+		$userdata = array(
+			'id' => $data['id'],
+			'email' => $data['email'],
+			'first_name' => $data['first_name'],
+			'last_name' => $data['last_name'],
+		);
+		$user->update($userdata);
+		
+		$userExtra = UserExtra::where('user_id', $data['id']);
+		if ($userExtra)
+		{
+			$userExtra->update($extradata);
+		}
+		
+		// Nu moeten we nog de groep bekijken (als die gewijzigd is)
+		var_dump($data);
+		
+
+		print("<br />thisUser");
+		
+		$allGroups = $this->group->all();
+		$thisUser = Sentry::findUserById($data['id']);
+		
+		// haal alle entries in tabel users_groups met user_id gelijk aan deze id
+		$groepenobj = DB::select("select group_id FROM users_groups WHERE user_id = {$data['id']}");
+		foreach ($groepenobj AS $item)
+		{
+			$groepen[] = $item->group_id;
+		}
+		if (!$groepen)
+		{
+			// nu moet je er eventueel maken
+			die("waarschijnlijk moet je groepen aanmaken");
+		} else {
+			// groepen = de groepen in de tabel voor deze gebruiker
+			// allGroups = de opsomming van alle mogelijke groepen
+			foreach($allGroups AS $group)
+			{
+				try{
+					// we doorlopen alle mogelijke groepen -
+					//  als we een groep vinden in het record van de gebruiker
+					if (in_array($group->id, $groepen))
+					{
+					//      als die groep ook aangevinkt is in het formulier
+					//         dan : doe niets, want alles blijft zoals het was
+					//         anders : verwijder de groep uit de databank
+					   if (!isset($data["{$group->name}"]))
+					   {
+					   		$gr = Sentry::findGroupById($group->id);
+					   		$thisUser->removeGroup($gr);
+	//				        print("<br /> de groep {$group->name} verwijderen we uit het record in de db");
+					   }
+					} else {
+					//  anders
+					//      als die groep  aangevinkt is in het formulier				
+						if (isset($data["{$group->name}"]))
+						{
+					//         dan : voeg die groep toe bij de gebruiker
+							$gr = Sentry::findGroupById($group->id);
+							$thisUser->addGroup($gr);
+						} 
+					//         anders : laat zoals het is
+					}
+				} catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+				{
+				    echo 'User was not found.';
+				}
+				catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e)
+				{
+				    echo 'Group was not found.';
+				}				
+			}
+		}		
+		return Redirect::to('inhoud');
+
 	}
 }
 
