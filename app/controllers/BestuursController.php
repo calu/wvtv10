@@ -9,7 +9,7 @@ class BestuursController extends \BaseController {
 	 */
 	public function index()
 	{
-		$bestuurs = Bestuur::all();
+		$bestuurs = Bestuur::getFullList();
 
 		return View::make('bestuurs.index', compact('bestuurs'));
 	}
@@ -134,6 +134,12 @@ class BestuursController extends \BaseController {
 		}
 		Bestuur::destroy($id);
 		return Redirect::to('/volledigelijst/bestuur');
+	}
+	
+	public function volledigelijst($rubriek, $title)
+	{
+		// Haal de bestuursleden met alle gegevens 
+		return $this->index();
 	}
 
 }

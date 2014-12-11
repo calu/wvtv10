@@ -16,13 +16,14 @@ $lijst = AppHelper::getShortlist($rubriek);
 <div>
 	<ul class='shorttable'>
 		@foreach($lijst AS $item)
-			<li>{{$item}}</li>
+			<?php $url = url('volledigelijst', $parameters = array('rubriek' => $rubriek, 'title' => $item)) ?>
+			<li><a href="{{ $url }}">{{$item}}</a></li>
 		@endforeach
 	</ul>
 	<div style='clear:both'>
 		{{-- link toon de volledige lijst --}}
 
-		<?php $url = url('volledigelijst',$parameters = array('rubriek' => $rubriek)); ?>
+		<?php $url = url('volledigelijst',$parameters = array('rubriek' => $rubriek, 'title' => 'leeg')); ?>
 		<a href='{{ $url }}' class='groen'>toon de volledige lijst</a>
 	</div>	
 </div>

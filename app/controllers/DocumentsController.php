@@ -103,5 +103,30 @@ class DocumentsController extends \BaseController {
 
 		return Redirect::route('documents.index');
 	}
+	
+	/*
+	 * volledigelijst
+	 * 
+	 * @purpose : toont de lijst van documenten, afhankelijk van de argumenten
+	 * @args :
+	 *    - rubriek : is eigenlijk het soort document (vb. novorming, interessante links ...)
+	 *    - title : is eigenlijk de rubriek die getoond wordt
+	 *        ( als null , dan wordt de volledige lijst getoond - )
+	 *        LET HIER OP : als null en toch een soort document met rubrieken, dan moet je de rubrieken afzonderlijk tonen !!!!
+	 * 
+	 * @return de view
+	 */
+	public function volledigelijst($rubriek, $title)
+	{
+		// Hier halen we de documenten op
+		//    Als er een title is
+		if ($title != 'leeg')
+		{
+			$documenten = Document::whereRaw('type = ? and title = ?', array($rubriek, $title))->orderBy('sortnr')->get();
+		} else {
+			$documenten = Document::where('type', $rubriek)->orderBy('sortnr')->get();
+		}
+		return View::make('documents.index')->with('documenten', $documenten)->with('rubriek', $rubriek)->with('title', $title);
+	}
 
 }

@@ -65,6 +65,7 @@ class Bestuur extends \Eloquent {
 	 {
 	 	$ret = null;
 	 	$bestuur = Bestuur::all()->sortby('sortnr');
+
 		foreach( $bestuur AS $item)
 		{
 			$temp = null;

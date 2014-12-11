@@ -68,10 +68,6 @@ Route::get('disclaimer', array('as' => 'disclaimer', function()
 Route::get('inhoud', array('as' => 'inhoud', function(){ return View::make('contents/index'); }));
 Route::get('beheer', function(){ return View::make('beheers/index'); });
 
-// routes gebruikt in content
-Route::get('volledigelijst/{rubriek}', function($rubriek){
-	return View::make('contents/volledigelijst')->with('rubriek', $rubriek);
-});
 
 // Routes voor het beheer onderdeel
 Route::resource('beheers', 'BeheersController');
@@ -88,6 +84,28 @@ Route::resource('bestuurs', 'BestuursController');
 
 // Routes voor Documenten
 Route::resource('documents', 'DocumentsController');
+
+// routes gebruikt in content
+
+Route::get('bestuursVolledigelijst/{rubriek}/{title}', array('as' => 'bestuursVolledigelijst', 'uses' => 'BestuursController@volledigelijst'));
+Route::get('documentvolledigelijst/{rubriek}/{title}', array('as' => 'documentVolledigelijst', 'uses' => 'DocumentsController@volledigelijst'));
+
+Route::get('volledigelijst/{rubriek}/{title}', array('as' => 'volledigelijst', function($rubriek, $title){
+	switch( $rubriek)
+	{
+		case 'bestuur' :
+			return Redirect::route('bestuursVolledigelijst', array('rubriek' => $rubriek, 'title' => $title));
+			//return Redirect::action('BestuursController@volledigelijst');
+			break;
+		case 'navorming' : 
+			return Redirect::route('documentVolledigelijst', array('rubriek' => $rubriek, 'title' => $title));
+			//return Redirect::action('DocumentsController@volledigelijst', array('rubriek' => $rubriek, 'title' => $title));
+			break;
+		default :
+			die("[Routes@volledigelijst] - de rubriek {$rubriek} werd nog niet geïmplementeerd");
+	
+	}
+}));
 
 // Route voor updown
 Route::get('arrow/{id}/{rubriek}/{direction}', function($id, $rubriek,$direction){

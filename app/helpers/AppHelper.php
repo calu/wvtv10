@@ -21,8 +21,14 @@ class AppHelper {
 				$ret[] = "wachtwoord wijzigen";
 				break;
 			case 'navorming' :
-				$ret[] = "1";
-				$ret[] = "2";
+				$titels = DB::select("SELECT DISTINCT(title) FROM documents WHERE type='{$rubriek}' ORDER BY sortnr");
+				$aantalTitels = sizeof($titels);
+				$max = ($aantalTitels > 4)? 4 : $aantalTitels;
+
+				for ($i = 0; $i < $max; $i++)
+				{
+					$ret[] = $titels[$i]->title;
+				}
 				break;
 			default :
 				print("<br /> deze rubriek {$rubriek} is nog niet geïmplementeerd");
