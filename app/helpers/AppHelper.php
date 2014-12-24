@@ -107,10 +107,11 @@ class AppHelper {
 	  *    id : de identificatie van dit item in de lijst
 	  *    rubriek : de rubriek 
 	  *    direction : up of down
+	  *    isTitel : (niet verplicht - maar dan "neen") "ja" als het een titel is
 	  * 
 	  * @returns : success
 	  */
-	  public static function moveItem($id, $rubriek, $direction)
+	  public static function moveItem($id, $rubriek, $direction, $isTitle = "neen")
 	  {
 	  	switch ($rubriek)
 		{
@@ -119,25 +120,12 @@ class AppHelper {
 				return Bestuur::moveItem($id, $direction);
 				$type = 1;
 				break;
+			case 'navorming':
+				return Document::moveItem($id, $direction, $rubriek, $isTitle);
+				break;
 			default : 
 				die("[AppHelper::moveItem] deze rubriek {$rubriek} is nog niet geïmplementeerd");
 		}
-
-		$item = DB::table($table)->where('id', $id)->get();
-		$sortnr = $item[0]->sortnr;
-		
-		if ($direction == 'up')
-		{
-			die("TODO [AppHelper:moveItem]");
-			
-			
-		}
-		
-		if ($direction == 'down')
-		{
-			die("TODO [AppHelper:moveItem]");
-		}
-		var_dump($item); die('xx');
 			
 	  }
 	  
@@ -155,6 +143,7 @@ class AppHelper {
 	   	switch( $rubriek)
 		{
 			case 'bestuur' : $ret = 'bestuurs'; break;
+			case 'navorming' : $ret = 'navorming'; break;
 			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
 		}
 		return $ret;
@@ -183,7 +172,63 @@ class AppHelper {
 			$enum = array_add($enum, $v, $v);
 		}
 		return $enum;
-	}	 
+	}	
+	
+	/*
+	 * getFullList
+	 * 
+	 * @purpose : haal de lijst op met alle entries voor deze rubriek - 
+	 *    let op : als title leeg is wordt alles opgehaald, anders enkel de entries met deze title 
+	 * @args :
+	 *   - rubriek : is het item ( vb. navorming, links, ....)
+	 *   - title : is de 'rubriek' dat we willen zien - indien 'leeg' dan alles ophalen
+	 * @return : array van objecten die de inhoud bezitten
+	 * 
+	 */ 
+	 public static function getFullList( $rubriek, $title)
+	 {
+	 	switch($rubriek)
+		{
+			case 'navorming' :
+				if ($title == 'leeg')
+				{
+					if (Sentry::check())
+					{
+						$ret = DB::table('documents')
+								->where('type', $rubriek)
+								->orderBy('title','sortnr')
+								->get();						
+					} else {
+						$ret = DB::table('documents')
+								->where('type', $rubriek)
+								->where('alwaysvisible', 1)
+								->orderBy('title','sortnr')
+								->get();
+					}					
+				}
+				else {
+					if (Sentry::check())
+					{
+						$ret = DB::table('documents')
+								->where('type', $rubriek)
+								->where('title', $title)
+								->orderBy('sortnr')
+								->get();						
+					} else {
+						$ret = DB::table('documents')
+								->where('type', $rubriek)
+								->where('title', $title)
+								->where('alwaysvisible', 1)
+								->orderBy('sortnr')
+								->get();						
+					}
+				}
+				break;
+			default :
+				die("[AppHelper/getFullList] deze functie werd nog niet geïmplementeerd voor {$rubriek}");
+		}
+		return $ret;
+	 }
 }
 
 ?>

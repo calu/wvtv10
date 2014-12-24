@@ -2,6 +2,7 @@
 
 <?php
 $isAdmin = Sentry::check() && Sentry::getUser()->hasAccess('admin');
+$isSysAdmin = Sentry::check() && Sentry::getUser()->id == 1;
 ?>
 {{-- Web site Title --}}
 @section('title')
@@ -19,6 +20,11 @@ $isAdmin = Sentry::check() && Sentry::getUser()->hasAccess('admin');
   	  <li> <a href="{{ URL::to('beheer/checkmail') }}">{{trans('beheer.checkmail')}}</a></li>
    		@endif 	  
   	  <li> <a href="{{ URL::to('beheer/editprofile') }}">{{trans('beheer.editprofile')}}</a></li>
+
+  	  @if ($isSysAdmin)
+  	  	<li><a href="{{ URL::to('beheer/restoredb') }}">{{trans('beheer.restoredb') }}</a></li>
+  	  @endif
+
   	</ol>
 </div>
 

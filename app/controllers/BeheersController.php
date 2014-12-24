@@ -370,5 +370,37 @@ class BeheersController extends \BaseController {
 	 	$item = Input::get('id');
 	 	return Redirect::route('changeprofile', array('id' => $item));
 	 }
+	 
+	 /*
+	  * restoredb
+	  * 
+	  * @purpose : trying to restore the database - as far as we can
+	  *    - this is mainly the documents table and there the sortnrs
+	  * @args : none
+	  * @return : status
+	  * 
+	  */
+	  public function restoredb()
+	  {
+	  	// We beginnen met de tabel documenten
+	  	//    haal de onderscheiden types op
+	  	$types = AppHelper::enum_to_array('documents', 'type');
+		foreach($types AS $type)
+		{
+			// haal nu alle rijen voor dit type, geordend volgens sortnr
+			$tabel = db::table('documents')->where('type',$type)->orderBy('sortnr')->get();
+			// doorloop deze tabel en hernummer het sortnr
+			$sortnr = 1;
+			print("<br />++++++++ TYPE = {$type}");
+			foreach($tabel AS $rij)
+			{
+				//$rij->sortnr = $sortnr++;
+				// hier nog sparen !!!!
+				db::table('documents')->where('id', $rij->id)->update(array('sortnr' => $sortnr++));
+			}
+			
+		}
+		die("RESTORED");
+	  }
 
 }

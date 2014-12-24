@@ -8,6 +8,7 @@ return array(
 	'userchoice' => 'Kies een lid',
 	'title' => 'Wijzig een profiel',
 	'choose' => 'Je keuze',	
+	'restoredb' => 'herstel de databank',
 );
 
 ?>

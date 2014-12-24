@@ -75,6 +75,7 @@ Route::get('beheer/init', 'BeheersController@init');
 Route::get('beheer/checkmail', 'BeheersController@checkmail');
 Route::get('beheer/editprofile', 'BeheersController@editprofile');
 Route::post('beheer/userchosen', array('uses' => 'BeheersController@userchosen'));
+Route::get('beheer/restoredb', 'BeheersController@restoredb');
 
 Route::get('changeprofile/{id}', array('as' => 'changeprofile', 'uses' => 'UserController@changeprofile'));
 Route::post('storeprofile', array('as' => 'storeprofile', 'uses' => 'UserController@storeprofile'));
@@ -110,8 +111,14 @@ Route::get('volledigelijst/{rubriek}/{title}', array('as' => 'volledigelijst', f
 // Route voor updown
 Route::get('arrow/{id}/{rubriek}/{direction}', function($id, $rubriek,$direction){
 	AppHelper::moveItem($id, $rubriek, $direction);
-	return View::make('contents/volledigelijst')->with('rubriek', $rubriek);
+	return Redirect::route('documentVolledigelijst', array('rubriek' => $rubriek, 'title' => 'leeg'));
+//	return View::make('contents/volledigelijst')->with('rubriek', $rubriek);
 //	 print("id = {$id} en rubriek = {$rubriek} en direction = {$direction}");
+});
+Route::get('arrow/{id}/{rubriek}/{direction}/{isTitle}',function($id, $rubriek,$direction, $isTitle){
+	AppHelper::moveItem($id, $rubriek, $direction, $isTitle);
+	return Redirect::route('documentVolledigelijst', array('rubriek' => $rubriek, 'title' => 'leeg'));
+//	return View::make('contents/volledigelijst')->with('rubriek', $rubriek);
 });
 
 // Routes voor edit in fulllist

@@ -8,6 +8,7 @@ return array(
 	'userchoice' => 'Choose a user',
 	'title' => 'Edit a profile',
 	'choose' => 'Your choice ',
+	'restoredb' => 'Restore the database',
 );
 
 ?>

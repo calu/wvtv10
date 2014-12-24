@@ -31,7 +31,7 @@
 		if ($editor) $headers[] = "";
 		
 		// de url voor het toevoegen van een nieuw beheerslid
-		$urlnieuw = url("BestuursController/create");
+		$urlnieuw = url("bestuurs/create");
 		?>
 		
 @section('content')

@@ -53,8 +53,9 @@ class BestuursController extends \BaseController {
 		$bestuur->bestuursfunctie = $data['bestuursfunctie'];
 		$bestuur->sortnr = $max_sortnr + 1;
 		$bestuur->save();
+		
+		return Redirect::route('bestuursVolledigelijst', array('rubriek' => 'bestuur', 'title' => 'leeg'));
 
-		return Redirect::to('/volledigelijst/bestuur');
 	}
 
 	/**
@@ -90,6 +91,7 @@ class BestuursController extends \BaseController {
 	 */
 	public function update($id)
 	{
+		
 		$bestuur = Bestuur::findOrFail($id);
 
 		$validator = Validator::make($data = Input::all(), Bestuur::$rules);
@@ -98,8 +100,8 @@ class BestuursController extends \BaseController {
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
-		$bestuur->update($data);
-		return Redirect::to('/volledigelijst/bestuur');
+		$bestuur->update($data);	
+		return Redirect::to('inhoud');
 
 	}
 
@@ -133,7 +135,7 @@ class BestuursController extends \BaseController {
 			$item->save();
 		}
 		Bestuur::destroy($id);
-		return Redirect::to('/volledigelijst/bestuur');
+		return Redirect::to('inhoud');
 	}
 	
 	public function volledigelijst($rubriek, $title)
