@@ -19,11 +19,14 @@ class DocumentsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
-	{
-		return View::make('documents.create');
+	public function create($rubriek){
+		return View::make('documents.create', array('rubriek' => $rubriek));
 	}
 
+	public function spaar()
+	{
+		die("spaar ...");
+	}
 	/**
 	 * Store a newly created document in storage.
 	 *
@@ -31,16 +34,101 @@ class DocumentsController extends \BaseController {
 	 */
 	public function store()
 	{
-		$validator = Validator::make($data = Input::all(), Document::$rules);
+		$data = Input::all();
+		// als er een newTitle is (trim!), dan wordt dit de title
+		if (strlen(trim($data['newtitle'])) > 0){
+			$data['title'] = trim($data['newtitle']); // The new title is the new one
+		}		
+		
+		// De datum herformatteren
+		$date = $data['date'];
+		if ($date == null) $data['date'] = "0000-00-00";
+		else {
+			$data['date'] = AppHelper::formatEuropean2UTC($date);
+		}		
+		// Er moet ofwel een url ofwel een bestand zijn ...
+		$url = $data['url'];
+		$urlvol = strlen($url) > 0;
+		
+		if (Input::file('file') == null){
+			$local = null;
+			$localvol = 0;
+		} else {
+			$local = Input::file('file')->getClientOriginalName();
+			$localvol = strlen($local) > 0;			
+		}
+
+		$xor = $urlvol ^$localvol;
+		
+		if ($xor){
+			if ($localvol){
+				// het bestand moet je nu uploaden en in de url plaatsen
+				//$extension = AppHelper::getExtension($local);
+				$extension = File::extension($local);
+
+				$filename = md5(uniqid()) . "." . $extension;
+				$directory = 'docs/';
+				$moved = Input::file('file')->move($directory,$filename);
+//				$newurl = public_path()."/".$filename;
+$newurl = "public/docs/".$filename;
+				$data['url'] = $newurl;
+			}
+		} else {
+			// plaats foutmelding dat je niet beide kan kiezen ... maar 1 mogelijk
+			die("fout niet beide");
+		}		
+		
+		$validator = Validator::make($data, Document::$rules);
 
 		if ($validator->fails())
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
+		
+		
+		$doc = new Document();
+		$doc->title = $data['title'];
+		$doc->description = $data['description'];
+		$doc->url = $data['url'];
+		$doc->date = $data['date'];
+		$doc->sortnr = Document::berekenSortnr($data);
+		
+		if ($data['file'] != null){
+			$filename = $data['file']->getClientOriginalName();
+		} else {
+			$filename = "";
+		}
+		$doc->localfilename = $filename;
+		$doc->author = $data['author'];
+		if (isset($data['alwaysvisible']))
+		{
+			$doc->alwaysvisible =  1;
+		} else {
+			$doc->alwaysvisible = 0;
+		}
+		$doc->type = $data['rubriek'];
+		$date = new DateTime;
+		$doc->created_at = $date;
+		$doc->updated_at = $date;		
 
-		Document::create($data);
 
-		return Redirect::route('documents.index');
+		// Als dit geen nieuw artikel is .... pas dan de sortnrs aan!
+		// Is dit geen nieuw artikel?
+		if ($data['title'] != $data['newtitle']){
+			// hernummer alle items vanaf het item met sortnr == $doc->sortnr (maar niet deze nieuwe!)
+			// Daarom halen we nu alle items op, gerangschikt volgens sortnr en groter of gelijk aan sortnr
+			$thisSortnr = $doc->sortnr;
+			$items = DB::table('documents')->where('type', $data['rubriek'])->where('sortnr','>=',$thisSortnr)->orderBy('sortnr')->get();
+			$currentSortnr = $thisSortnr+1;
+			foreach($items AS $item)
+			{
+				$id = $item->id;
+				DB::table('documents')->where('id', $id)->update(array('sortnr' => $currentSortnr));
+				$currentSortnr++;
+			}
+		}
+		$ret = $doc->save();
+		return Redirect::route('volledigelijst', array('rubriek' => $data['rubriek'], 'title' => 'leeg'));
 	}
 
 	/**
@@ -69,6 +157,7 @@ class DocumentsController extends \BaseController {
 		return View::make('documents.edit', compact('document'));
 	}
 
+
 	/**
 	 * Update the specified document in storage.
 	 *
@@ -76,19 +165,67 @@ class DocumentsController extends \BaseController {
 	 * @return Response
 	 */
 	public function update($id)
-	{
+	{ 
 		$document = Document::findOrFail($id);
+		
+		$current = Input::all();
 
-		$validator = Validator::make($data = Input::all(), Document::$rules);
+		if (strlen(trim($current['newtitle'])) > 0){
+			$current['title'] = trim($current['newtitle']); // The new title is the new one
+		}
+		
+		// de datum herformatteren
+		$date = $current['date'];
+		if ($date == null) $current['date'] = "0000-00-00";
+		else {
+			$current['date'] = AppHelper::formatEuropean2UTC($date);
+		}
+		
+		// url en file
+		// Als er een file is gekozen --> uploaden naar lokale file en dan url geven naar deze
+		$url = $current['url'];
+		$urlvol = strlen($url) > 0;
+		
+		if (Input::file('file') == null){
+			$local = null;
+			$localvol = 0;
+		} else {
+			$local = Input::file('file')->getClientOriginalName();
+			$localvol = strlen($local) > 0;			
+		}
+
+		$xor = $urlvol ^$localvol;
+		
+		if ($xor){
+			if ($localvol){
+				// het bestand moet je nu uploaden en in de url plaatsen
+				//$extension = AppHelper::getExtension($local);
+				$extension = File::extension($local);
+
+				$filename = md5(uniqid()) . "." . $extension;
+				$directory = 'docs/';
+				$moved = Input::file('file')->move($directory,$filename);
+//				$newurl = public_path()."/".$filename;
+$newurl = "public/docs/".$filename;
+				$current['url'] = $newurl;
+			}
+		} else {
+			// plaats foutmelding dat je niet beide kan kiezen ... maar 1 mogelijk
+			die("fout niet beide");
+		}		
+		
+		$validator = Validator::make($current, Document::$rules);
 
 		if ($validator->fails())
 		{
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
 
-		$document->update($data);
+		$document->update($current);
 
-		return Redirect::route('documents.index');
+		return Redirect::route('volledigelijst', array('rubriek' => $document->type, 'title' => 'leeg'));
+
+//		return Redirect::route('documents.index');
 	}
 
 	/**

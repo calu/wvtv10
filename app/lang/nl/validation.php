@@ -89,6 +89,14 @@ return array(
 	|
 	*/
 
-	'attributes' => array(),
+	'attributes' => array(
+		'title' => 'titel',
+		'description' => 'omschrijving',
+		'date' => 'datum',
+		'localfilename' => 'lokaal bestand',
+		'author' => 'auteur',
+		'alwaysvisible' => 'altijd zichtbaar',
+		'type' => 'rubriek',
+	),
 
 );

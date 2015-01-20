@@ -92,6 +92,7 @@ li.menu{
 .label-90,
 .label-100,
 .label-120,
+.label-200,
 .mycol-70,
 .mycol-100,
 .mycol-120,
@@ -120,6 +121,7 @@ li.menu{
 	.label-90 { float : left; width : 90px;}
 	.label-100 { float : left; width : 100px;}
 	.label-120 { float : left; width : 120px;}
+	.label-200 { float : left; width : 200px;}
 	.mycol-70 { float : left; width : 70px;}
 	.mycol-100 { width : 100px; }
 	.mycol-120 { width : 120px; }

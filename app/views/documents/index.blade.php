@@ -23,7 +23,7 @@
 		// ook nog $editor
 		 $editor = (Sentry::check() && (Sentry::getUser()->hasAccess('admin') || Sentry::getUser()->hasAccess('secretary')));
 		 $rubriekpointer = AppHelper::getRubriekpointer($rubriek);
-		 $urlnieuw = url("create/{$rubriek}");
+		 $urlnieuw = url("documentcreate", array('rubriek' => $rubriek));
 		 
 		 // nu de rijinhoud samenstellen
 		 $titelInLijn = $rubriek == 'links' || $rubriek == 'wetgeving';
@@ -75,7 +75,7 @@
 </div>
 
 @if ($editor)
-	<div><a href="{{ $urlnieuw }}"><span class='rood'>TODO</span>Een nieuw item toevoegen</a></div>
+	<div><a href="{{ $urlnieuw }}">Een nieuw item toevoegen</a></div>
 @endif
 
 <div class='table-responsive'>
@@ -124,8 +124,8 @@
 					@endif
 					<td>{{ $rij->description }}</td>
 					<td>{{ $rij->date }}</td>
-					<td>
-						<a href="{{ $rij->url }}" target='_new'>link</a>
+					<td>{{ $rij->url }} 
+						<a href="{{ url($rij->url) }}" target='_new'>link</a>
 					</td>
 			    	@if ($editor)
 				    	<?php

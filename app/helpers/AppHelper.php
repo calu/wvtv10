@@ -229,6 +229,51 @@ class AppHelper {
 		}
 		return $ret;
 	 }
+	 
+	 /*
+	  * date conversion UTC2European
+	  * 
+	  * @purpose : change the UTC date (as in database) to the European representation ( 2nd argument)
+	  * @args :
+	  *    - date : dateFormat
+	  *    - format : dateFormat ()
+	  * @return : date in format from 2nd arg
+	  */
+	  public static function formatUTC2European($datestring, $format = 'j-m-Y')
+	  {
+	  		$date = new DateTime($datestring);
+	  		return $date->format($format);
+	  }
+	  
+	  /*
+	   * date conversion European2UTC
+	   * 
+	   * @purpose : change the date format back to the UTC date - to write it in the database
+	   * @args :
+	   *    - date : string in European format
+	   * @return : date in UTC format
+	   * 
+	   */
+	  public static function formatEuropean2UTC($datestring)
+	  {
+	  	$date = new DateTime($datestring);
+		return $date->format('Y-m-j');
+	  }
+	  
+	  /*
+	   * getExtension : get de ext value of the file xxxxx.ext
+	   * return : ext
+	   * 
+	   */
+	  public static function getExtension($filename)
+	  {
+	  	// zoek de plaats van de laatste .
+	  	$pos = strrpos($filename,'.');
+		$ret = substr($filename, $pos+1);
+		return $ret;
+	  }
+	  
+	  
 }
 
 ?>

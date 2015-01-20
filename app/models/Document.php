@@ -4,12 +4,23 @@ class Document extends \Eloquent {
 
 	// Add your validation rules here
 	public static $rules = array(
-		// 'title' => 'required'
+		 'title' => 'required',
+		 'description' => 'required | min:2',
+	);
+	// author niet verplicht
+	// 
+	
+	public static $messages = array(
+		'required' => "Het trans('document.'.:attribute) veld moet ingevuld zijn",
 	);
 
 	// Don't forget to fill this array
-	protected $fillable = array('');
-	
+	protected $fillable = array(
+		'id','title','description','url','date','sortnr','localfilename','author','alwaysvisible','type','created_at',
+		'updated_at'
+	);
+	protected $guarded = array();
+ 	
 	/*
 	 * moveItem($id, $direction, $rubriek, $isTitle)
 	 * 
@@ -182,6 +193,35 @@ class Document extends \Eloquent {
 			   DB::table('documents')->where('id', $ditItem->id)->update(array('sortnr' => $volgendSortnr));
 			   DB::table('documents')->where('id', $volgendItem[0]->id)->update(array('sortnr' => $sortnrDitItem));				
 			}
+		}
+	}
+
+    /*
+	 * berekenSortnr($data)
+	 * 
+	 * @purpose :
+	 *    Het juiste sortnr wordt berekend.
+	 *    Als dit een nieuwe rubriek is, dan krijgt dit item het hoogste sortnr + 1
+	 *    Als dit een bestaande rubriek is, dan krijgt dit item het hoogste sortnr van deze rubriek + 1
+	 *       en de overige rubrieken (vanaf dit sortnr) worden hernummerd
+	 * 
+	 * @params : data is een array met alle gegevens van dit nieuw item
+	 * @return : het sortnr dat je hier moet invullen
+	 */
+    public static function berekenSortnr($data)
+	{
+		// Is dit een nieuwe rubriek?
+		if ($data['title'] == $data['newtitle'])
+		{
+			// Een nieuwe rubriek, wordt onderaan in de reeks toegevoegd
+			// Begin dus met het hoogste sortnr voor deze rubriek te zoeken
+			$maxSortnr = DB::table('documents')->where('type', $data['rubriek'])->max('sortnr');
+			return $maxSortnr+1;
+		} else {
+			// Deze rubriek bestaat reeds
+			//   Zoek nu het hoogste sortnr in de reeks met deze 'title'
+			$maxSortnr = DB::table('documents')->where('type', $data['rubriek'])->where('title', $data['title'])->max('sortnr');
+			return $maxSortnr+1;
 		}
 	}
 

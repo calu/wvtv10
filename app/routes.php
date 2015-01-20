@@ -130,6 +130,9 @@ Route::get('edit/{id}/{rubriek}', function($id, $rubriek){
 			//Redirect::action('bestuurs/edit', array('id' => $id));
 			return Redirect::action('BestuursController@edit', array('id' => $id));
 			break;
+		case 'navorming' :
+			return Redirect::action('DocumentsController@edit', array('id' => $id));
+			break;
 		default :
 			die("[routes@get(edit/id/rubriek)] - de rubriek {$rubriek} werd nog niet geïmplementeerd");
 	}
@@ -152,7 +155,12 @@ Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
 	die("[Routes.php] - delete/{$id}/{$rubriek}");
 });
 
-
+Route::get('documentcreate/{rubriek}', array('as' => 'documentcreate', 'uses' => 'DocumentsController@create'));
+Route::post('documentspaar', function(){ die("store");});
+//Route::post('documentspaar', array('as' => 'documentspaar', 'uses' => 'DocumentsController@store'));
+/* Route::post('documentspaar', array('as' => 'documentspaar', function(){
+	die("xxx");
+})); */
 
 
 
