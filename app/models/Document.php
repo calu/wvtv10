@@ -34,12 +34,17 @@ class Document extends \Eloquent {
 		
 		// Haal het item met deze id
 		//   bewaar het sortnr --> sortnrDitItem
+		
 		$ditItem = Document::find($id);
+		
 		$sortnrDitItem = $ditItem->sortnr;
 		$ditItemTitel = $ditItem->title;
+		
+		
 		// Als direction == up
 		if ($direction == 'up')
 		{
+				
 			//   Als sortnr == 1 --> return (wijzig niets want het staat al vooraan)
 			if ($sortnrDitItem == 1) return;
 			//   Als isTitle --> 
@@ -49,9 +54,12 @@ class Document extends \Eloquent {
 				//   haal eerst vorig item
 				$vorigSortnr = $sortnrDitItem-1;
 				$vorigItem = Document::whereRaw('type = ? and sortnr = ?', array($rubriek, $vorigSortnr))->get();
+			
+				
 				$vorigeTitel = $vorigItem[0]->title;
 				$hulpsortnr = $vorigSortnr - 1;
 				$vorigeTitelItem = $vorigItem;	
+						
 				do {
 					$zelfdetitel = true;
 					if ($hulpsortnr <= 0) break;

@@ -141,6 +141,10 @@ Route::get('edit/{id}/{rubriek}', function($id, $rubriek){
 
 // Routes voor edit in fulllist
 Route::get('bestuurs/delete/{id}', array('as' => 'bestuurs.delete', 'uses' => 'BestuursController@destroy'));
+
+Route::get('documentdelete/{id}/{rubriek}', array('as' => 'documentdelete', 'uses' => 'DocumentsController@destroy'));
+
+
 Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
 	switch( $rubriek )
 	{
@@ -149,6 +153,8 @@ Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
 			return Redirect::action('bestuurs.delete', array($id));
 			//return Redirect::action('BestuursController@destroy', array('id' => $id));
 			break;
+		case 'navorming' :
+			return Redirect::route('documentdelete', array('id' => $id, 'rubriek' => $rubriek));
 		default:
 			die("[routes@get(delete/id/rubriek)] - de rubriek {$rubriek} werd nog niet geïmplementeerd");
 	}
@@ -157,10 +163,7 @@ Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
 
 Route::get('documentcreate/{rubriek}', array('as' => 'documentcreate', 'uses' => 'DocumentsController@create'));
 Route::post('documentspaar', function(){ die("store");});
-//Route::post('documentspaar', array('as' => 'documentspaar', 'uses' => 'DocumentsController@store'));
-/* Route::post('documentspaar', array('as' => 'documentspaar', function(){
-	die("xxx");
-})); */
+
 
 
 

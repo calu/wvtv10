@@ -234,11 +234,28 @@ $newurl = "public/docs/".$filename;
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($id, $rubriek)
 	{
-		Document::destroy($id);
+		$ditItem = DB::table('documents')->find($id);
+		$url = $ditItem->url;
 
-		return Redirect::route('documents.index');
+//		die("<p />[DocumentsController@destroy] -- ($id, $rubriek) file = {$url}");
+		// Na het vernietigen moeten we 2 zaken uitvoeren
+		Document::destroy($id);
+		
+		// Ten eerste : de sortnrs hernummeren!
+		//    Het eenvoudigste hier is om gewoon de (geordende) rij van deze rubriek te hernummeren
+		$items = DB::table('documents')->where('type', $rubriek)->orderBy('sortnr')->get();
+		$currentSortnr = 1;
+		foreach($items AS $item)
+		{
+			DB::table('documents')->where('id', $item->id)->update(array('sortnr' => $currentSortnr));
+			$currentSortnr++;
+		}
+		// Ten tweede : het artikel zelf vernietigen (in public/docs)
+		File::delete($url);
+
+		return Redirect::route('volledigelijst', array('rubriek' => $rubriek, 'title' => 'leeg'));
 	}
 	
 	/*
