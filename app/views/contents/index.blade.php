@@ -71,7 +71,29 @@
 <div class='row'>
 
 	
-	<div class='col-xs-4 '>links3</div>	
+	<div class='col-xs-4 '>
+		<?php
+		$url1 = Url("geschiedenis/beknoptgesch.php");
+		$url2 = Url("geschiedenis/landsteiner.html");
+		$url3 = Url("geschiedenis/coombs.html");
+		$url4 = Url("geschiedenis/wintrobe.html");
+		?>
+		{{-- geschiedenis --}}
+		<div class='panel panel-danger'>
+			<div class='panel-heading'>
+				{{HTML::image('img/widgets/geschiedenis.png') }}
+						Geschiedenis
+			</div>
+			<div class='panel-body'>
+				<ul class='shorttable'>
+					<li><a href='{{ $url1 }}' target='_new'>Beknopte geschiedenis van de transfusie</a></li>
+					<li><a href='{{ $url2 }}' target='_new'>Karel L. Landsteiner</a></li>
+					<li><a href='{{ $url3 }}' target='_new'>Robin R.A. Coombs</a></li>
+					<li><a href='{{ $url4 }}' target='_new'>Maxwell M. Wintrobe</a></li>
+				</ul>
+			</div>
+		</div>		
+	</div>	
 	
 	<div class='col-xs-4 '>midden3</div>
 	
