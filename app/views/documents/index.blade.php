@@ -41,8 +41,7 @@
 		 $obj = new StdClass();
 		 $obj->title = $title;
 		 $rubriekenlijst = array($obj);
-		 
-		
+		 		
 		 if (($titelInLijn || $title == 'leeg'))
 		 {
 			 $rubriekenlijst = DB::table('documents')
@@ -50,7 +49,9 @@
 								->where('type', $rubriek)
 								->orderBy('sortnr')
 								->get();		 	
-		 }		 
+		 }	else {
+		 	$rubriekenlijst = array('titel');
+		 }	 
 		 
 		 // Nu we de kolommen hebben berekend, moeten we de kolombreedte (aantalkolommen) berekenen voor de titellijn
 		 // Als het echter een beheerder is en er is een titel! dan moeten we er de up/down pijltjes voorzetten
@@ -80,6 +81,60 @@
 
 <div class='table-responsive'>
 	{{-- Als je geen rubriekenlijst heb haal je de volledige inhoud op --}}
+	@if ($titelInLijn)
+
+		<?php $inhoud = AppHelper::getFullList($rubriek,''); ?>
+		{{-- var_dump($inhoud); die("jkdjjlj") --}}
+		{{-- toon nu de volledige tabel --}}
+		<table class='table table-bordered'>
+			<thead>
+				<tr>
+					@foreach ($headers AS $header)
+						<th>{{ $header }}</th>
+					@endforeach					
+				</tr>
+			</thead>
+			<tbody>
+				@foreach( $inhoud AS $rij)			
+				<tr>
+					@if ($editor)
+				    	<?php
+				    		$urlup = url('arrow', $parameters = array('id' => $rij->id, 'rubriek' => $rubriek, 'direction' => 'up'));
+							$urldown = url('arrow', $parameters = array('id' => $rij->id, 'rubriek' => $rubriek, 'direction' => 'down'))
+				    	?>					
+				    	<td class='mycol-70'>
+				    		<a href="{{ $urlup }}" rel='tooltip'>{{ HTML::image('img/up.png') }}</a>
+				    		<a href="{{ $urldown }}" rel='tooltip'>{{ HTML::image('img/down.png') }}</a>
+				    	</td>					
+					@endif
+					
+					@if ($rij->alwaysvisible ==1 || $editor)
+						@if ($titelInLijn)
+							<td> {{ $rij->title }}</td>
+						@endif
+						<td>{{ $rij->description }}</td>
+						<td>{{ $rij->date }}</td>
+						<td>{{ $rij->url }} 
+							<a href="{{ url($rij->url) }}" target='_new'>link</a>
+						</td>
+					@endif
+					
+			    	@if ($editor)
+				    	<?php
+				    		$urledit = url('edit', $parameters = array('id' => $rij->id, 'rubriek' => $rubriek));
+							$urldelete = url('delete', $parameters = array('id' => $rij->id, 'rubriek' => $rubriek));
+				    	?>
+				    	<td>
+				    		<a href="{{ $urledit }}" rel='tooltip'><span class="glyphicon glyphicon-pencil"></span></a>
+				    		<a href="{{ $urldelete }}" rel='tooltip'><span class="glyphicon glyphicon-trash"></span></a>
+				    	</td>
+			    	@endif						
+				</tr>				
+				@endforeach			
+				
+			</tbody>
+		</table>
+	@else
 	@foreach ($rubriekenlijst AS $titleObject)
 		<?php $inhoud = AppHelper::getFullList($rubriek, $titleObject->title); ?>
 
@@ -107,7 +162,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach( $inhoud AS $rij)
+				
+				@foreach( $inhoud AS $rij)			
 				<tr>
 					@if ($editor)
 				    	<?php
@@ -119,14 +175,18 @@
 				    		<a href="{{ $urldown }}" rel='tooltip'>{{ HTML::image('img/down.png') }}</a>
 				    	</td>					
 					@endif
-					@if ($titelInLijn)
-						<td> {{ $rij->title }}</td>
+					
+					@if ($rij->alwaysvisible ==1 || $editor)
+						@if ($titelInLijn)
+							<td> {{ $rij->title }}</td>
+						@endif
+						<td>{{ $rij->description }}</td>
+						<td>{{ $rij->date }}</td>
+						<td>{{ $rij->url }} 
+							<a href="{{ url($rij->url) }}" target='_new'>link</a>
+						</td>
 					@endif
-					<td>{{ $rij->description }}</td>
-					<td>{{ $rij->date }}</td>
-					<td>{{ $rij->url }} 
-						<a href="{{ url($rij->url) }}" target='_new'>link</a>
-					</td>
+					
 			    	@if ($editor)
 				    	<?php
 				    		$urledit = url('edit', $parameters = array('id' => $rij->id, 'rubriek' => $rubriek));
@@ -137,11 +197,12 @@
 				    		<a href="{{ $urldelete }}" rel='tooltip'><span class="glyphicon glyphicon-trash"></span></a>
 				    	</td>
 			    	@endif						
-				</tr>
-				@endforeach
+				</tr>				
+				@endforeach			
 			</tbody>
 		</table>
 	@endforeach
+	@endif
 </div>
 
 

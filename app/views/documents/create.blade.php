@@ -14,6 +14,8 @@
 	{
 		$choices[$choice->title] = $choice->title;
 	}
+	
+	$titelInLijn = $rubriek == 'links' || $rubriek == 'wetgeving';
 		
 ?>
 {{-- Content --}}
@@ -43,19 +45,27 @@
         'role' => 'form'
         )) }}
         
-        
+        @if ($titelInLijn)  
+	        <div class='form-group fullwidth'>
+		        {{ Form::label('edit-newtitle', trans('document.edit-linetitle'), array('class' => 'label-120 control-label' )) }}
+	        	{{ Form::text('newtitle', '', array('class' => 'mycol-600', 'placeholder' => trans('document.edit-linetitle'), 'id' => 'edit-newtitle' )) }}
+	        </div>         
+        @else     
         <div class='roodkader'>
+
 	        <div class='form-group fullwidth'>
 	        	{{ Form::label('edit-title', trans('document.edit-title'), array('class' => 'label-120 control-label' )) }}
 	        	{{ Form::select('title', $choices, '', array('class' => 'mycol-600', 'placeholder' => trans('document.edit-title'), 'id' => 'edit-title' )) }}
 	        	{{ ($errors->has('title') ? $errors->first('country') : '')}}
 	        </div>
+
 	        <div class='clearfix'>&nbsp;</div>
 	        <div class='form-group fullwidth'>
-	        	{{ Form::label('edit-newtitle', trans('document.edit-newtitle'), array('class' => 'label-120 control-label' )) }}
+		        {{ Form::label('edit-newtitle', trans('document.edit-newtitle'), array('class' => 'label-120 control-label' )) }}
 	        	{{ Form::text('newtitle', '', array('class' => 'mycol-600', 'placeholder' => trans('document.edit-newtitle'), 'id' => 'edit-newtitle' )) }}
 	        </div>
         </div>
+	    @endif        
         <div class='clearfix'>&nbsp;</div>
         <div class='form-group fullwidth'>
         	{{ Form::label('edit-description', trans('document.edit-description'), array('class' => 'label-120 control-label' )) }}

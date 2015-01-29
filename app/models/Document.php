@@ -136,8 +136,8 @@ class Document extends \Eloquent {
 
 			   if ($sortnrDitItem == 1) return;
 			   $vorigSortnr = $sortnrDitItem - 1;
-			   $vorigItem = $item = Document::whereRaw('type = ? and sortnr = ?', array($rubriek, $vorigSortnr))->get();	
-			   if ($vorigItem[0]->title != $ditItemTitel) return;
+			   $vorigItem = $item = Document::whereRaw('type = ? and sortnr = ?', array($rubriek, $vorigSortnr))->get();				   
+//			   if ($vorigItem[0]->title != $ditItemTitel) return;
 			   DB::table('documents')->where('id', $ditItem->id)->update(array('sortnr' => $vorigSortnr));
 			   DB::table('documents')->where('id', $vorigItem[0]->id)->update(array('sortnr' => $sortnrDitItem));		
 			}
@@ -197,7 +197,7 @@ class Document extends \Eloquent {
 				$volgendSortnr = $sortnrDitItem +1;
 				if ($volgendSortnr > $maxSortnr) return;
 				$volgendItem = $item = Document::whereRaw('type = ? and sortnr = ?', array($rubriek, $volgendSortnr))->get();
-				if ($volgendItem[0]->title != $ditItemTitel) return;
+//				if ($volgendItem[0]->title != $ditItemTitel) return;
 			   DB::table('documents')->where('id', $ditItem->id)->update(array('sortnr' => $volgendSortnr));
 			   DB::table('documents')->where('id', $volgendItem[0]->id)->update(array('sortnr' => $sortnrDitItem));				
 			}

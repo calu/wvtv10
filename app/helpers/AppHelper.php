@@ -30,8 +30,20 @@ class AppHelper {
 					$ret[] = $titels[$i]->title;
 				}
 				break;
+			case 'links' :
+				$titels = DB::select("SELECT title, url FROM documents where type='{$rubriek}' ORDER BY sortnr");
+				$aantalTitels = sizeof($titels);
+				$max = ($aantalTitels > 4)? 4 : $aantalTitels;
+				
+				for ($i=0; $i < $max; $i++)
+				{
+					$temp['title'] = $titels[$i]->title;
+					$temp['url'] = $titels[$i]->url;
+					$ret[] = $temp;
+				}
+				break;
 			default :
-				print("<br /> deze rubriek {$rubriek} is nog niet geïmplementeerd");
+				print("<br />[Apphelper/getShortList] deze rubriek {$rubriek} is nog niet geïmplementeerd");
 				die(" ##### tot hier");
 		}
 		return $ret;
@@ -121,6 +133,7 @@ class AppHelper {
 				$type = 1;
 				break;
 			case 'navorming':
+			case 'links' :
 				return Document::moveItem($id, $direction, $rubriek, $isTitle);
 				break;
 			default : 
@@ -144,6 +157,7 @@ class AppHelper {
 		{
 			case 'bestuur' : $ret = 'bestuurs'; break;
 			case 'navorming' : $ret = 'navorming'; break;
+			case 'links' : $ret = 'links'; break;
 			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
 		}
 		return $ret;
@@ -187,6 +201,7 @@ class AppHelper {
 	 */ 
 	 public static function getFullList( $rubriek, $title)
 	 {
+
 	 	switch($rubriek)
 		{
 			case 'navorming' :
@@ -207,14 +222,14 @@ class AppHelper {
 					}					
 				}
 				else {
-					if (Sentry::check())
-					{
+//					if (Sentry::check())
+//					{
 						$ret = DB::table('documents')
 								->where('type', $rubriek)
 								->where('title', $title)
 								->orderBy('sortnr')
 								->get();						
-					} else {
+/*					} else {
 						$ret = DB::table('documents')
 								->where('type', $rubriek)
 								->where('title', $title)
@@ -222,7 +237,14 @@ class AppHelper {
 								->orderBy('sortnr')
 								->get();						
 					}
+ */
 				}
+				break;
+			case 'links' :
+				$ret = DB::table('documents')
+						->where('type', $rubriek)
+						->orderBy('sortnr')
+						->get();
 				break;
 			default :
 				die("[AppHelper/getFullList] deze functie werd nog niet geïmplementeerd voor {$rubriek}");

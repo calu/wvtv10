@@ -99,6 +99,7 @@ Route::get('volledigelijst/{rubriek}/{title}', array('as' => 'volledigelijst', f
 			//return Redirect::action('BestuursController@volledigelijst');
 			break;
 		case 'navorming' : 
+		case 'links' :
 			return Redirect::route('documentVolledigelijst', array('rubriek' => $rubriek, 'title' => $title));
 			//return Redirect::action('DocumentsController@volledigelijst', array('rubriek' => $rubriek, 'title' => $title));
 			break;
@@ -131,6 +132,7 @@ Route::get('edit/{id}/{rubriek}', function($id, $rubriek){
 			return Redirect::action('BestuursController@edit', array('id' => $id));
 			break;
 		case 'navorming' :
+		case 'links' : 
 			return Redirect::action('DocumentsController@edit', array('id' => $id));
 			break;
 		default :
@@ -154,6 +156,7 @@ Route::get('delete/{id}/{rubriek}', function($id, $rubriek){
 			//return Redirect::action('BestuursController@destroy', array('id' => $id));
 			break;
 		case 'navorming' :
+		case 'links' :
 			return Redirect::route('documentdelete', array('id' => $id, 'rubriek' => $rubriek));
 		default:
 			die("[routes@get(delete/id/rubriek)] - de rubriek {$rubriek} werd nog niet geïmplementeerd");

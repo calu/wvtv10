@@ -36,7 +36,17 @@
 
 <div class='row'>
 	
-	<div class='col-xs-4 '>links2</div>
+	<div class='col-xs-4 '>
+		<div class="panel panel-danger">
+			<div class="panel-heading"">
+				{{HTML::image('img/widgets/links.png') }}
+				Navorming
+			</div>
+			<div class="panel-body">
+				@include('contents.widget', array('rubriek' => 'links'))
+			</div>
+		</div>		
+	</div>
 		
 	<div class='col-xs-4 '>midden2</div>
 		
