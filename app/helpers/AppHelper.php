@@ -21,6 +21,7 @@ class AppHelper {
 				$ret[] = "wachtwoord wijzigen";
 				break;
 			case 'navorming' :
+			case 'transfusie' :
 				$titels = DB::select("SELECT DISTINCT(title) FROM documents WHERE type='{$rubriek}' ORDER BY sortnr");
 				$aantalTitels = sizeof($titels);
 				$max = ($aantalTitels > 4)? 4 : $aantalTitels;
@@ -134,6 +135,7 @@ class AppHelper {
 				break;
 			case 'navorming':
 			case 'links' :
+			case 'transfusie' :
 				return Document::moveItem($id, $direction, $rubriek, $isTitle);
 				break;
 			default : 
@@ -158,6 +160,7 @@ class AppHelper {
 			case 'bestuur' : $ret = 'bestuurs'; break;
 			case 'navorming' : $ret = 'navorming'; break;
 			case 'links' : $ret = 'links'; break;
+			case 'transfusie' : $ret = 'transfusie'; break;
 			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
 		}
 		return $ret;
@@ -205,6 +208,7 @@ class AppHelper {
 	 	switch($rubriek)
 		{
 			case 'navorming' :
+			case 'transfusie' :
 				if ($title == 'leeg')
 				{
 					if (Sentry::check())

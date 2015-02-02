@@ -21,7 +21,17 @@
 			</div>
 		</div>
 	</div>
-	<div class='col-xs-4 '>midden1</div>	
+	<div class='col-xs-4 '>
+		<div class="panel panel-danger">
+			<div class="panel-heading"">
+				{{HTML::image('img/widgets/transfusie.png') }}
+				Transfusie
+			</div>
+			<div class="panel-body">
+				@include('contents.widget', array('rubriek' => 'transfusie')) 
+			</div>
+		</div>		
+	</div>	
 	<div class='col-xs-4'>
 		<div class="panel panel-danger">
 			<div class="panel-heading">

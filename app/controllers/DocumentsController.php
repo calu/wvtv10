@@ -33,7 +33,7 @@ class DocumentsController extends \BaseController {
 	 * @return Response
 	 */
 	public function store()
-	{
+	{ 
 		$data = Input::all();
 		// als er een newTitle is (trim!), dan wordt dit de title
 		if (strlen(trim($data['newtitle'])) > 0){
@@ -100,6 +100,7 @@ $newurl = "public/docs/".$filename;
 		}
 		$doc->localfilename = $filename;
 		$doc->author = $data['author'];
+
 		if (isset($data['alwaysvisible']))
 		{
 			$doc->alwaysvisible =  1;
@@ -214,6 +215,7 @@ $newurl = "public/docs/".$filename;
 			die("fout niet beide");
 		}		
 		
+		if (isset($current['alwaysvisible'])) $current['alwaysvisible'] = 1; else $current['alwaysvisible'] = 0;		
 		$validator = Validator::make($current, Document::$rules);
 
 		if ($validator->fails())
