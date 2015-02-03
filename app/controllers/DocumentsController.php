@@ -274,6 +274,7 @@ $newurl = "public/docs/".$filename;
 	 */
 	public function volledigelijst($rubriek, $title)
 	{
+
 		// Hier halen we de documenten op
 		//    Als er een title is
 		if ($title != 'leeg')
@@ -281,7 +282,7 @@ $newurl = "public/docs/".$filename;
 			$documenten = Document::whereRaw('type = ? and title = ?', array($rubriek, $title))->orderBy('sortnr')->get();
 		} else {
 			$documenten = Document::where('type', $rubriek)->orderBy('sortnr')->get();
-		}
+		}	
 		return View::make('documents.index')->with('documenten', $documenten)->with('rubriek', $rubriek)->with('title', $title);
 	}
 

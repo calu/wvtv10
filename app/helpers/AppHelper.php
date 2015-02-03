@@ -22,6 +22,7 @@ class AppHelper {
 				break;
 			case 'navorming' :
 			case 'transfusie' :
+			case 'document' :
 				$titels = DB::select("SELECT DISTINCT(title) FROM documents WHERE type='{$rubriek}' ORDER BY sortnr");
 				$aantalTitels = sizeof($titels);
 				$max = ($aantalTitels > 4)? 4 : $aantalTitels;
@@ -136,6 +137,7 @@ class AppHelper {
 			case 'navorming':
 			case 'links' :
 			case 'transfusie' :
+			case 'document' :
 				return Document::moveItem($id, $direction, $rubriek, $isTitle);
 				break;
 			default : 
@@ -161,6 +163,7 @@ class AppHelper {
 			case 'navorming' : $ret = 'navorming'; break;
 			case 'links' : $ret = 'links'; break;
 			case 'transfusie' : $ret = 'transfusie'; break;
+			case 'document' : $ret = 'document'; break;
 			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
 		}
 		return $ret;
@@ -209,6 +212,7 @@ class AppHelper {
 		{
 			case 'navorming' :
 			case 'transfusie' :
+			case 'document' : 
 				if ($title == 'leeg')
 				{
 					if (Sentry::check())

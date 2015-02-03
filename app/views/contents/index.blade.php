@@ -58,7 +58,17 @@
 		</div>		
 	</div>
 		
-	<div class='col-xs-4 '>midden2</div>
+	<div class='col-xs-4 '>
+		<div class="panel panel-danger">
+			<div class="panel-heading"">
+				{{HTML::image('img/widgets/documentatie.png') }}
+				Documentatie
+			</div>
+			<div class="panel-body">
+				@include('contents.widget', array('rubriek' => 'document'))
+			</div>
+		</div>		
+	</div>
 		
 	<div class='col-xs-4'>
 		<div class='panel panel-danger'>

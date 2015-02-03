@@ -41,7 +41,7 @@
 		 $obj = new StdClass();
 		 $obj->title = $title;
 		 $rubriekenlijst = array($obj);
-		 		
+	 		
 		 if (($titelInLijn || $title == 'leeg'))
 		 {
 			 $rubriekenlijst = DB::table('documents')
@@ -49,10 +49,12 @@
 								->where('type', $rubriek)
 								->orderBy('sortnr')
 								->get();		 	
-		 }	else {
+		 }	else if ( !$titelInLijn && $title != 'leeg'){
+		 	$rubriekenlijst = DB::table('documents')->select(DB::raw('DISTINCT title'))->where('type', $rubriek)->where('title', $title)->get();
+		 } else {
 		 	$rubriekenlijst = array('titel');
 		 }	 
-		 
+ 
 		 // Nu we de kolommen hebben berekend, moeten we de kolombreedte (aantalkolommen) berekenen voor de titellijn
 		 // Als het echter een beheerder is en er is een titel! dan moeten we er de up/down pijltjes voorzetten
 		 // en daarom verminderen we het aantal kolommen met 1
@@ -64,8 +66,7 @@
 		 		 		 
 //		 $inhoud = AppHelper::getFullList($rubriek, $title);
 //		 var_dump($inhoud);
-
-		 
+	 
 		?>
 		
 @section('content')
@@ -135,6 +136,7 @@
 			</tbody>
 		</table>
 	@else
+
 	@foreach ($rubriekenlijst AS $titleObject)
 		<?php $inhoud = AppHelper::getFullList($rubriek, $titleObject->title); ?>
 
