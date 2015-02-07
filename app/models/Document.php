@@ -34,7 +34,7 @@ class Document extends \Eloquent {
 		
 		// Haal het item met deze id
 		//   bewaar het sortnr --> sortnrDitItem
-		
+// die("moveItem($id, $direction, $rubriek, $isTitle)");		
 		$ditItem = Document::find($id);		
 		$ditItemSortnr = $ditItem->sortnr;
 		if ($direction == 'up'){
@@ -105,8 +105,14 @@ class Document extends \Eloquent {
 
 	public static function moveUpInBlok($ditItem, $rubriek)
 	{
+// die("moveUpInBlok($ditItem->title, $rubriek)");		
 		// haal het volledige huidige blok op
-		$huidigBlok = DB::table('documents')->whereRaw('type = ? and title = ?', array($rubriek, $ditItem->title))->orderBy('sortnr')->get();
+		if ($rubriek == 'wetgeving' || $rubriek == 'links'){
+			$huidigBlok = DB::table('documents')->where('type', $rubriek)->orderBy('sortnr')->get();
+		} else {
+			$huidigBlok = DB::table('documents')->whereRaw('type = ? and title = ?', array($rubriek, $ditItem->title))->orderBy('sortnr')->get();		
+		}
+		
 		$eersteSortnr = $huidigBlok[0]->sortnr;
 
 		// Als het sortnr van dit item = eersteSortnr --> je moet niets doen
@@ -122,7 +128,11 @@ class Document extends \Eloquent {
 	
 	public static function moveDownInBlok($ditItem, $rubriek){
 		// haal het volledige huidige blok op
-		$huidigBlok = DB::table('documents')->whereRaw('type = ? and title = ?', array($rubriek, $ditItem->title))->orderBy('sortnr')->get();
+		if ($rubriek == 'wetgeving' || $rubriek == 'links'){
+			$huidigBlok = DB::table('documents')->where('type', $rubriek)->orderBy('sortnr')->get();
+		} else {
+			$huidigBlok = DB::table('documents')->whereRaw('type = ? and title = ?', array($rubriek, $ditItem->title))->orderBy('sortnr')->get();		
+		}		
 		// haal het hoogste sortnr (dus laatste) in dit blok
 		$laatsteSortnrInHuidigBlok = $huidigBlok[sizeof($huidigBlok)-1]->sortnr;
 //		print("laatste sortnr in huidig blok = {$laatsteSortnrInHuidigBlok}<br />");		

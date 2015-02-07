@@ -33,6 +33,7 @@ class AppHelper {
 				}
 				break;
 			case 'links' :
+			case 'wetgeving' :
 				$titels = DB::select("SELECT title, url FROM documents where type='{$rubriek}' ORDER BY sortnr");
 				$aantalTitels = sizeof($titels);
 				$max = ($aantalTitels > 4)? 4 : $aantalTitels;
@@ -138,6 +139,7 @@ class AppHelper {
 			case 'links' :
 			case 'transfusie' :
 			case 'document' :
+			case 'wetgeving' :
 				return Document::moveItem($id, $direction, $rubriek, $isTitle);
 				break;
 			default : 
@@ -164,6 +166,7 @@ class AppHelper {
 			case 'links' : $ret = 'links'; break;
 			case 'transfusie' : $ret = 'transfusie'; break;
 			case 'document' : $ret = 'document'; break;
+			case 'wetgeving' : $ret = 'wetgeving' ; break;
 			default : die("[AppHelper::getRubriekpointer] { $rubriek } nog niet geïmplementeerd");
 		}
 		return $ret;
@@ -249,6 +252,7 @@ class AppHelper {
 				}
 				break;
 			case 'links' :
+			case 'wetgeving' :
 				$ret = DB::table('documents')
 						->where('type', $rubriek)
 						->orderBy('sortnr')

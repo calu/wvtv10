@@ -115,7 +115,17 @@
 		</div>		
 	</div>	
 	
-	<div class='col-xs-4 '>midden3</div>
+	<div class='col-xs-4 '>
+		<div class="panel panel-danger">
+			<div class="panel-heading"">
+				{{HTML::image('img/widgets/wetgeving.png') }}
+				Overheidpublicaties
+			</div>
+			<div class="panel-body">
+				@include('contents.widget', array('rubriek' => 'wetgeving'))
+			</div>
+		</div>			
+	</div>
 	
 	<div class='col-xs-4 '>
 		<div class='panel panel-danger'>
